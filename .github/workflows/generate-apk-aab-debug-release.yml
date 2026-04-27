@@ -9,6 +9,9 @@ env:
 
   # The output folder for build results
   build_output_path: buildActionResult
+  
+  #After error in action buil, the message stated to add the code below to fix  the error
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 on:
 
