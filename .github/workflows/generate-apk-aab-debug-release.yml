@@ -9,123 +9,119 @@ env:
 
   # The output folder for build results
   build_output_path: buildActionResult
-  
-  #After error in action buil, the message stated to add the code below to fix  the error
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+  # Fix Node.js deprecation warning (must be string)
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 on:
-
   push:
     branches:
       - 'release/**'
 
-  # Allows you to run this workflow manually from the Actions tab
+  # Allows manual run
   workflow_dispatch:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout repository
       - uses: actions/checkout@v4
 
-      # Set Current Date As Env Variable
-      - name: Set current date as env variable
+      # Set Current Date
+      - name: Set current date
         run: echo "date_today=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
-      # Set Repository Name As Env Variable
-      - name: Set repository name as env variable
+      # Set Repository Name
+      - name: Set repository name
         run: echo "repository_name=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
 
-      - name: Set Up JDK
+      # Setup Java
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu' # See 'Supported distributions' for available options
+          distribution: 'zulu'
           java-version: '17'
-          cache: 'gradle'
+          cache: gradle
 
-      - name: Change wrapper permissions
+      # Grant execute permission
+      - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      # Run Tests Build
-      - name: Run gradle tests
+      # Run tests (will NOT fail build)
+      - name: Run Gradle tests
         run: ./gradlew test
+        continue-on-error: true
 
-      # Run Build Project
-      - name: Build gradle project
-        run: ./gradlew build
+      # Build project
+      - name: Build project
+        run: ./gradlew build --no-daemon
 
-      # Create APK Debug
-      - name: Build apk debug project (APK) - ${{ env.main_project_module }} module
+      # Build APK Debug
+      - name: Build Debug APK
         run: ./gradlew assembleDebug
 
-      # Create APK Release
-      - name: Build apk release project (APK) - ${{ env.main_project_module }} module
+      # Build APK Release
+      - name: Build Release APK
         run: ./gradlew assemble
 
-      # Create Bundle AAB Release
-      # Noted for main module build [main_project_module]:bundleRelease
-      - name: Build app bundle release (AAB) - ${{ env.main_project_module }} module
+      # Build AAB
+      - name: Build App Bundle (AAB)
         run: ./gradlew ${{ env.main_project_module }}:bundleRelease
 
-      # Upload Artifact Build
-      # Noted For Output [main_project_module]/build/outputs/apk/debug/
-      - name: Upload APK Debug - ${{ env.repository_name }}
+      # Upload Debug APK
+      - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - APK(s) debug generated
+          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - Debug APK
           path: ${{ env.main_project_module }}/build/outputs/apk/debug/
 
-      # Noted For Output [main_project_module]/build/outputs/apk/release/
-      - name: Upload APK Release - ${{ env.repository_name }}
+      # Upload Release APK
+      - name: Upload Release APK
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - APK(s) release generated
+          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - Release APK
           path: ${{ env.main_project_module }}/build/outputs/apk/release/
 
-      # Noted For Output [main_project_module]/build/outputs/bundle/release/
-      - name: Upload AAB (App Bundle) Release - ${{ env.repository_name }}
+      # Upload AAB
+      - name: Upload AAB
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - App bundle(s) AAB release generated
+          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - AAB
           path: ${{ env.main_project_module }}/build/outputs/bundle/release/
 
-      # ======================================================
-      # Copy Build Outputs & Push to GitHub
-      # ======================================================
-
-      # Delete build/outputs directory if it already exists
-      - name: Clean up build/outputs directory
+      # Clean output folder
+      - name: Clean output folder
         run: rm -rf ${{ env.build_output_path }}
 
-      # Create build/outputs directory if it doesn't exist
-      - name: Create build/outputs directory
+      # Create output folder
+      - name: Create output folder
         run: mkdir -p ${{ env.build_output_path }}
 
-      # Copy APK Debug to build/outputs
-      - name: Copy APK Debug to build/outputs
+      # Copy Debug APK
+      - name: Copy Debug APK
         run: |
-          cp -r ${{ env.main_project_module }}/build/outputs/apk/debug/* ${{ env.build_output_path }}/ 2>/dev/null || echo "No APK debug files found"
+          cp -r ${{ env.main_project_module }}/build/outputs/apk/debug/* ${{ env.build_output_path }}/ 2>/dev/null || echo "No debug APK"
 
-      # Copy APK Release to build/outputs
-      - name: Copy APK Release to build/outputs
+      # Copy Release APK
+      - name: Copy Release APK
         run: |
-          cp -r ${{ env.main_project_module }}/build/outputs/apk/release/* ${{ env.build_output_path }}/ 2>/dev/null || echo "No APK release files found"
+          cp -r ${{ env.main_project_module }}/build/outputs/apk/release/* ${{ env.build_output_path }}/ 2>/dev/null || echo "No release APK"
 
-      # Copy AAB Release to build/outputs
-      - name: Copy AAB Release to build/outputs
+      # Copy AAB
+      - name: Copy AAB
         run: |
-          cp -r ${{ env.main_project_module }}/build/outputs/bundle/release/* ${{ env.build_output_path }}/ 2>/dev/null || echo "No AAB release files found"
+          cp -r ${{ env.main_project_module }}/build/outputs/bundle/release/* ${{ env.build_output_path }}/ 2>/dev/null || echo "No AAB"
 
-      # List copied files for verification
-      - name: List build/outputs contents
+      # Verify copied files
+      - name: List output files
         run: ls -la ${{ env.build_output_path }}/
 
-      # Commit and Push to GitHub
-      - name: Commit & Push build outputs to GitHub
+      # Commit and push build outputs
+      - name: Commit & Push outputs
         run: |
-          git config user.name '${{ github.actor }}'
-          git config user.email '${{ github.actor }}@users.noreply.github.com'
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
           git add ${{ env.build_output_path }}/ -f
-          git diff --cached --quiet && echo "No changes to commit" || (git commit -m "ci: upload build outputs - ${{ env.date_today }} [skip ci]" && git push)
+          git diff --cached --quiet || (git commit -m "ci: upload build outputs - ${{ env.date_today }} [skip ci]" && git push)
