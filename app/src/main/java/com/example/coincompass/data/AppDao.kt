@@ -17,6 +17,9 @@ interface CategoryDao {
     @Insert
     suspend fun insert(category: Category)
 
+    @Delete
+    suspend fun delete(category: Category)
+
     @Query("SELECT * FROM categories")
     fun getAllCategories(): LiveData<List<Category>>
 }

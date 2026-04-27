@@ -4,125 +4,137 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context=".ui.AddExpenseActivity">
+    android:background="@color/white"
+    android:padding="24dp">
 
+    <!-- Header: Title and Close Button -->
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/header_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Expense"
-        android:textSize="24sp"
+        android:text="New Expense"
+        android:textColor="@color/dark_green"
+        android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/amount_edit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Amount"
-        android:inputType="numberDecimal"
-        app:layout_constraintTop_toBottomOf="@id/title" />
-
-    <EditText
-        android:id="@+id/description_edit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Description"
-        app:layout_constraintTop_toBottomOf="@id/amount_edit" />
-
-    <Spinner
-        android:id="@+id/category_spinner"
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/btn_close"
+        android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/description_edit" />
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/text_grey" />
 
-    <Button
-        android:id="@+id/date_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Select Date"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/category_spinner" />
-
-    <TextView
-        android:id="@+id/selected_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="No date selected"
-        app:layout_constraintBottom_toBottomOf="@id/date_button"
-        app:layout_constraintStart_toEndOf="@id/date_button"
-        app:layout_constraintTop_toTopOf="@id/date_button" />
-
+    <!-- Form Fields -->
     <LinearLayout
-        android:id="@+id/time_container"
+        android:id="@+id/form_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/date_button">
+        android:layout_marginTop="32dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/header_title">
 
-        <Button
-            android:id="@+id/start_time_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start Time" />
+        <!-- Category Dropdown -->
+        <Spinner
+            android:id="@+id/category_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:drawable/edit_text"
+            android:padding="8dp" />
 
-        <TextView
-            android:id="@+id/selected_start_time"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="8dp"
-            android:text="--:--" />
+        <!-- Description -->
+        <EditText
+            android:id="@+id/description_edit"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:drawable/edit_text"
+            android:hint="Description"
+            android:padding="16dp" />
 
-        <Button
-            android:id="@+id/end_time_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="End Time" />
+        <!-- Amount (R) -->
+        <EditText
+            android:id="@+id/amount_edit"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:drawable/edit_text"
+            android:drawableStart="@android:drawable/ic_menu_edit"
+            android:drawablePadding="12dp"
+            android:hint="Amount (R)"
+            android:inputType="numberDecimal"
+            android:padding="16dp" />
 
-        <TextView
-            android:id="@+id/selected_end_time"
-            android:layout_width="0dp"
+        <!-- Date -->
+        <EditText
+            android:id="@+id/date_edit"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:drawable/edit_text"
+            android:drawableEnd="@drawable/ic_goals"
+            android:hint="Date"
+            android:inputType="date"
+            android:padding="16dp" />
+
+        <!-- Times row -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="8dp"
-            android:text="--:--" />
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/start_time_edit"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@android:drawable/edit_text"
+                android:hint="Start Time"
+                android:inputType="time"
+                android:padding="16dp" />
+
+            <EditText
+                android:id="@+id/end_time_edit"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@android:drawable/edit_text"
+                android:hint="End Time"
+                android:inputType="time"
+                android:padding="16dp" />
+        </LinearLayout>
+
+        <!-- Attach Receipt -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_attach_receipt"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_marginBottom="32dp"
+            android:backgroundTint="#F8F9FA"
+            android:text="Attach Receipt Photo"
+            android:textColor="@color/gold"
+            app:cornerRadius="12dp" />
+
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/expense_photo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="16dp"
-        android:scaleType="centerCrop"
-        android:background="#EEE"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/time_container" />
-
+    <!-- Save Button -->
     <Button
-        android:id="@+id/photo_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="Add Photo"
-        app:layout_constraintBottom_toBottomOf="@id/expense_photo"
-        app:layout_constraintStart_toEndOf="@id/expense_photo"
-        app:layout_constraintTop_toTopOf="@id/expense_photo" />
-
-    <Button
-        android:id="@+id/save_button"
+        android:id="@+id/save_expense_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_height="56dp"
+        android:backgroundTint="@color/dark_green"
         android:text="Save Expense"
-        app:layout_constraintTop_toBottomOf="@id/expense_photo" />
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
