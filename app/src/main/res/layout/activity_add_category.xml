@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Create New Category"
-                android:textColor="@color/dark_green"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
 
             <EditText
@@ -60,6 +60,8 @@
                 android:layout_marginTop="12dp"
                 android:background="@android:drawable/edit_text"
                 android:hint="Enter name (e.g. Health)"
+                android:textColor="@color/black"
+                android:textColorHint="@color/text_grey"
                 android:padding="16dp" />
 
             <Button
@@ -69,6 +71,7 @@
                 android:layout_marginTop="16dp"
                 android:backgroundTint="@color/dark_green"
                 android:text="Add Category"
+                android:textColor="@color/gold"
                 android:textAllCaps="false" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

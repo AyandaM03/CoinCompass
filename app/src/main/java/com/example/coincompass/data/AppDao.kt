@@ -32,6 +32,9 @@ interface ExpenseDao {
     @Query("SELECT * FROM expenses")
     fun getAllExpenses(): LiveData<List<Expense>>
 
+    @Query("SELECT * FROM expenses WHERE id = :id")
+    suspend fun getExpenseById(id: Long): Expense?
+
     @Query("SELECT * FROM expenses WHERE date BETWEEN :startDate AND :endDate")
     fun getExpensesBetweenDates(startDate: String, endDate: String): LiveData<List<Expense>>
 

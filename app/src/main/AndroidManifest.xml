@@ -30,6 +30,7 @@
         <activity android:name=".ui.AddExpenseActivity" />
         <activity android:name=".ui.AddCategoryActivity" />
         <activity android:name=".ui.HistoryActivity" />
+        <activity android:name=".ui.ExpenseDetailActivity" />
         <activity android:name=".ui.SetGoalActivity" />
         <activity android:name=".MainActivity" />
 

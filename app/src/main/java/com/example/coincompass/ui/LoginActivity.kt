@@ -40,6 +40,10 @@ class LoginActivity : AppCompatActivity() {
                 val user = db.userDao().getUserByUsername(username)
                 // If we found them and the password matches
                 if (user != null && user.password == password) {
+                    // SAVE USERNAME FOR THE DASHBOARD
+                    val sharedPref = getSharedPreferences("user_prefs", MODE_PRIVATE)
+                    sharedPref.edit().putString("current_username", user.fullName).apply()
+
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     startActivity(intent)
                     finish() // Close login screen

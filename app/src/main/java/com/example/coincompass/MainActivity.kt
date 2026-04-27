@@ -28,6 +28,11 @@ class MainActivity : AppCompatActivity() {
 
         db = AppDatabase.getDatabase(this)
 
+        // Display the logged-in user's name
+        val sharedPref = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val currentUserName = sharedPref.getString("current_username", "User")
+        binding.userName.text = currentUserName
+
         // Setup the buttons to go to other screens
         binding.btnAdd.setOnClickListener {
             startActivity(Intent(this, AddExpenseActivity::class.java))
@@ -37,8 +42,20 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, AddCategoryActivity::class.java))
         }
 
+        binding.btnGoals.setOnClickListener {
+            startActivity(Intent(this, com.example.coincompass.ui.SetGoalActivity::class.java))
+        }
+
         binding.btnHistory.setOnClickListener {
             startActivity(Intent(this, com.example.coincompass.ui.HistoryActivity::class.java))
+        }
+
+        // Logout button logic
+        binding.btnLogout.setOnClickListener {
+            val intent = Intent(this, com.example.coincompass.ui.LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
         }
 
         // Setup the budget overview list
@@ -64,6 +81,18 @@ class MainActivity : AppCompatActivity() {
             // Just some fake balance math for now
             val income = 25000.00 
             binding.totalBalance.text = "R${"%.2f".format(income - totalSpent)}"
+        }
+
+        // Connect the "Savings Summary" to the user's goals
+        val currentMonth = java.text.SimpleDateFormat("yyyy-MM", java.util.Locale.getDefault()).format(java.util.Date())
+        db.goalDao().getGoalForMonth(currentMonth).observe(this) { goal ->
+            if (goal != null) {
+                binding.savingsCard.visibility = android.view.View.VISIBLE
+                binding.savingsGoalDisplay.text = "Min: R${"%.2f".format(goal.minGoal)} | Max: R${"%.2f".format(goal.maxGoal)}"
+                binding.budgetLabel.text = "Budget Overview" // Keep title clean
+            } else {
+                binding.savingsCard.visibility = android.view.View.GONE
+            }
         }
     }
 

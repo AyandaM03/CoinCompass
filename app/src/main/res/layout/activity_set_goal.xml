@@ -4,51 +4,136 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context=".ui.SetGoalActivity">
+    android:background="@color/white"
+    android:padding="24dp">
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/header_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Set Monthly Goal"
-        android:textSize="24sp"
+        android:text="Financial Goals"
+        android:textColor="@color/dark_green"
+        android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/month_edit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:hint="Month (YYYY-MM)"
-        app:layout_constraintTop_toBottomOf="@id/title" />
+    <ImageButton
+        android:id="@+id/btn_back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/ic_menu_revert"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/text_grey" />
 
-    <EditText
-        android:id="@+id/min_goal_edit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Minimum Goal"
-        android:inputType="numberDecimal"
-        app:layout_constraintTop_toBottomOf="@id/month_edit" />
-
-    <EditText
-        android:id="@+id/max_goal_edit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Maximum Goal"
-        android:inputType="numberDecimal"
-        app:layout_constraintTop_toBottomOf="@id/min_goal_edit" />
-
-    <Button
-        android:id="@+id/save_button"
+    <!-- Create Goal Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/create_goal_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Save Goal"
-        app:layout_constraintTop_toBottomOf="@id/max_goal_edit" />
+        app:cardBackgroundColor="#F8F9FA"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="2dp"
+        app:layout_constraintTop_toBottomOf="@id/header_title">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set Monthly Savings Goal"
+                android:textColor="@color/dark_green"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Minimum Goal (R)"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/min_goal_edit"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="4dp"
+                android:background="@android:drawable/edit_text"
+                android:hint="e.g. 500"
+                android:inputType="numberDecimal"
+                android:textColor="@color/black"
+                android:textColorHint="@color/text_grey"
+                android:padding="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Maximum Limit (R)"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/max_goal_edit"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="4dp"
+                android:background="@android:drawable/edit_text"
+                android:hint="e.g. 2000"
+                android:inputType="numberDecimal"
+                android:textColor="@color/black"
+                android:textColorHint="@color/text_grey"
+                android:padding="16dp" />
+
+            <Button
+                android:id="@+id/save_goal_button"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="24dp"
+                android:backgroundTint="@color/dark_green"
+                android:text="Save Goal"
+                android:textColor="@color/gold"
+                android:textAllCaps="false" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/active_goal_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Your Current Goal"
+        android:textColor="@color/dark_green"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/create_goal_card" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:cardBackgroundColor="@color/cream_input"
+        app:cardCornerRadius="16dp"
+        app:layout_constraintTop_toBottomOf="@id/active_goal_label">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/current_goal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No goal set for this month"
+                android:textColor="@color/dark_green" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
