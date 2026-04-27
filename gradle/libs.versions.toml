@@ -9,7 +9,8 @@ appcompat = "1.7.1"
 material = "1.13.0"
 activityKtx = "1.13.0"
 constraintlayout = "2.2.1"
-room = "2.6.1"
+room = "2.7.0-alpha13"
+ksp = "2.1.0-1.0.29"
 lifecycle = "2.8.7"
 navigation = "2.8.7"
 
@@ -32,5 +33,6 @@ navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx",
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-legacy-kapt = { id = "com.android.legacy-kapt", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
