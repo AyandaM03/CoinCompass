@@ -1,0 +1,127 @@
+name: Generated APK AAB (Push Github - Create Artifact To Github Action)
+
+env:
+  # The name of the main module repository
+  main_project_module: app
+
+  # The name of the Play Store
+  playstore_name: Frogobox ID
+
+  # The output folder for build results
+  build_output_path: buildActionResult
+
+  # Fix Node.js deprecation warning (must be string)
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
+on:
+  push:
+    branches:
+      - 'release/**'
+
+  # Allows manual run
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repository
+      - uses: actions/checkout@v4
+
+      # Set Current Date
+      - name: Set current date
+        run: echo "date_today=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      # Set Repository Name
+      - name: Set repository name
+        run: echo "repository_name=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
+
+      # Setup Java
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: gradle
+
+      # Grant execute permission
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      # Run tests (will NOT fail build)
+      - name: Run Gradle tests
+        run: ./gradlew test
+        continue-on-error: true
+
+      # Build project
+      - name: Build project
+        run: ./gradlew build --no-daemon
+
+      # Build APK Debug
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+
+      # Build APK Release
+      - name: Build Release APK
+        run: ./gradlew assemble
+
+      # Build AAB
+      - name: Build App Bundle (AAB)
+        run: ./gradlew ${{ env.main_project_module }}:bundleRelease
+
+      # Upload Debug APK
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - Debug APK
+          path: ${{ env.main_project_module }}/build/outputs/apk/debug/
+
+      # Upload Release APK
+      - name: Upload Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - Release APK
+          path: ${{ env.main_project_module }}/build/outputs/apk/release/
+
+      # Upload AAB
+      - name: Upload AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - AAB
+          path: ${{ env.main_project_module }}/build/outputs/bundle/release/
+
+      # Clean output folder
+      - name: Clean output folder
+        run: rm -rf ${{ env.build_output_path }}
+
+      # Create output folder
+      - name: Create output folder
+        run: mkdir -p ${{ env.build_output_path }}
+
+      # Copy Debug APK
+      - name: Copy Debug APK
+        run: |
+          cp -r ${{ env.main_project_module }}/build/outputs/apk/debug/* ${{ env.build_output_path }}/ 2>/dev/null || echo "No debug APK"
+
+      # Copy Release APK
+      - name: Copy Release APK
+        run: |
+          cp -r ${{ env.main_project_module }}/build/outputs/apk/release/* ${{ env.build_output_path }}/ 2>/dev/null || echo "No release APK"
+
+      # Copy AAB
+      - name: Copy AAB
+        run: |
+          cp -r ${{ env.main_project_module }}/build/outputs/bundle/release/* ${{ env.build_output_path }}/ 2>/dev/null || echo "No AAB"
+
+      # Verify copied files
+      - name: List output files
+        run: ls -la ${{ env.build_output_path }}/
+
+      # Commit and push build outputs
+      - name: Commit & Push outputs
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git add ${{ env.build_output_path }}/ -f
+          git diff --cached --quiet || (git commit -m "ci: upload build outputs - ${{ env.date_today }} [skip ci]" && git push)
