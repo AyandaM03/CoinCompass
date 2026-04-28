@@ -13,6 +13,9 @@ import com.example.coincompass.databinding.ActivityMainBinding
 import com.example.coincompass.databinding.ItemBudgetCategoryBinding
 import com.example.coincompass.ui.AddCategoryActivity
 import com.example.coincompass.ui.AddExpenseActivity
+import com.example.coincompass.ui.HistoryActivity
+import com.example.coincompass.ui.LoginActivity
+import com.example.coincompass.ui.SetGoalActivity
 import java.util.Calendar
 
 // This is the home screen of our app
@@ -43,16 +46,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnGoals.setOnClickListener {
-            startActivity(Intent(this, com.example.coincompass.ui.SetGoalActivity::class.java))
+            startActivity(Intent(this, SetGoalActivity::class.java))
         }
 
         binding.btnHistory.setOnClickListener {
-            startActivity(Intent(this, com.example.coincompass.ui.HistoryActivity::class.java))
+            startActivity(Intent(this, HistoryActivity::class.java))
         }
 
         // Logout button logic
         binding.btnLogout.setOnClickListener {
-            val intent = Intent(this, com.example.coincompass.ui.LoginActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             finish()
