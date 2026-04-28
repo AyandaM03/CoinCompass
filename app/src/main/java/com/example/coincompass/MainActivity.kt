@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         val currentUserName = sharedPref.getString("current_username", "User")
         binding.userName.text = currentUserName
 
-        // Setup the buttons to go to other screens
+        // Set up the buttons to go to other screens
         binding.btnAdd.setOnClickListener {
             startActivity(Intent(this, com.example.coincompass.ui.AddExpenseActivity::class.java))
         }
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
-        // Setup the budget overview list
+        // Set up the budget overview list
         val adapter = BudgetAdapter()
         binding.budgetRecycler.layoutManager = LinearLayoutManager(this)
         binding.budgetRecycler.adapter = adapter
