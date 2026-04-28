@@ -1,27 +1,21 @@
-# CoinCompass - Navigate Your Finances 🧭💰
+# CoinCompass - Navigate Your Finances 
+
+<img width="475" height="350" alt="ic_logo" src="https://github.com/user-attachments/assets/1e1e6b14-9d32-4269-b088-37bca966f2a4" />
+
 
 **CoinCompass** is a user-friendly Android application designed to help you take control of your financial journey. Whether you're tracking daily expenses, setting savings goals, or managing spending categories, CoinCompass provides the tools you need to stay on track.
 
-## ✨ Features
+##  Features
 
-*   **Professional Splash Screen**: Start your experience with the app logo and our slogan: *"Navigate Your Finances"*.
-*   **Secure Authentication**: personalized accounts with username-based login and registration.
-*   **Intuitive Dashboard**: View your total balance, monthly income, and expenses at a glance with a sleek, dark-green themed interface.
-*   **Category Management**: Create and manage custom expense categories (e.g., Groceries, Entertainment, Car Fuel) to organize your spending.
-*   **Detailed Expense Tracking**: Record expenses with descriptions, amounts, dates, and even start/end times.
-*   **Budget Overview**: Track how much of your budget you've spent in each category with visual progress bars.
-*   **Expense History**: A dedicated section to view and review all your past transactions.
-*   **Savings Summary**: Keep an eye on your monthly spending limits to ensure you reach your financial goals.
+Professional Splash Screen: "Navigate Your Finances" is our tagline and the app logo will greet you. 
+• Secure Authentication: username-based login and registration for customized accounts. 
+• Intuitive Dashboard: With a modern, dark-green layout, you can quickly view your overall balance, monthly income, and expenses.  
+• Category Management: To arrange your expenditures, create and maintain unique expense categories (such as groceries, entertainment, and car fuel).  
+• Detailed Expense Tracking: Keep track of all expenses, including start and end times, amounts, dates, and descriptions.  
+• Financial Overview: Use visual progress bars to keep track of how much of your money you've spent in each category. • Expense History: A special area where you can see and examine all your previous transactions. 
+• Savings Summary: To make sure you meet your financial objectives, monitor your monthly expenditure caps. .
 
-## 📸 Screenshots
-
-| Splash Screen | Login | Dashboard | New Expense |
-| :---: | :---: | :---: | :---: |
-| ![Splash](https://via.placeholder.com/200x400?text=Splash+Screen) | ![Login](https://via.placeholder.com/200x400?text=Login+Screen) | ![Main](https://via.placeholder.com/200x400?text=Dashboard) | ![Expense](https://via.placeholder.com/200x400?text=Add+Expense) |
-
-*(Note: Replace these placeholders with your actual app screenshots!)*
-
-## 🛠️ Tech Stack
+## Tech Stack
 
 *   **Language**: [Kotlin](https://kotlinlang.org/)
 *   **UI Framework**: XML Layouts with [Material Components](https://material.io/develop/android)
@@ -29,61 +23,37 @@
 *   **Architecture**: MVVM (Model-View-ViewModel) logic with LiveData and Coroutines
 *   **Binding**: ViewBinding for efficient UI interaction
 
-## 🚀 Getting Started
 
-1.  **Clone the repository**:
-    ```bash
-    git clone https://github.com/YOUR_USERNAME/CoinCompass.git
-    ```
-2.  **Open in Android Studio**: Import the project as an existing Gradle project.
-3.  **Sync Gradle**: Let Android Studio download the necessary dependencies.
-4.  **Run the app**: Connect an Android device or use an emulator to see the app in action!
+##  About the Project
 
-## 🎓 About the Project
-
-This project was built with a focus on clean code and user-centric design. The code is well-commented to help students and developers understand the implementation of Room databases, RecyclerView adapters, and modern Android UI principles.
-
----
-*Created with ❤️ to help you navigate your finances.*
-
-CoinCompass: Navigate  your Finances  
-
-A straightforward Android software called CoinCompass was created to help you take charge of your financial path. CoinCompass gives you the tools you need to keep on track, whether you're managing spending categories, tracking daily expenses, or creating savings goals. 
-
-
-Features 
-
-Professional Splash Screen: "Navigate Your Finances" is our tagline and the app logo will greet you. 
-
-• Secure Authentication: username-based login and registration for customized accounts. 
-
-• Intuitive Dashboard: With a modern, dark-green layout, you can quickly view your overall balance, monthly income, and expenses.  
-
-• Category Management: To arrange your expenditures, create and maintain unique expense categories (such as groceries, entertainment, and car fuel).  
-
-• Detailed Expense Tracking: Keep track of all expenses, including start and end times, amounts, dates, and descriptions.  
-
-• Financial Overview: Use visual progress bars to keep track of how much of your money you've spent in each category. • Expense History: A special area where you can see and examine all your previous transactions. 
-
-• Savings Summary: To make sure you meet your financial objectives, monitor your monthly expenditure caps. 
-
- 
-Tech Stack 
-
-Language: Kotlin 
-
-UI Framework: XML Layouts with Material Components 
-
-Database: Room Persistence Library (SQLite) 
-
-Architecture: MVVM (Model-View-ViewModel) logic with LiveData and Coroutines 
-
-Binding: ViewBinding for efficient UI interaction 
-
-
-About the Project 
 Clean programming and user-centric design were priorities in the construction of this project. To aid developers and students in understanding how Room databases, RecyclerView adapters, and contemporary Android UI ideas are implemented, the code is well-commented.  
+Made with passion to assist you in managing your money.
 
-Made with passion to assist you in managing your money. 
+##  Video Demonstration
 
-Clean programming and user-centric design were priorities in the construction of this project. To aid developers and students in understanding how Room databases, RecyclerView adapters, and contemporary Android UI ideas are implemented, the code is well-commented. 
+YouTube Link: https://youtube.com/shorts/z0DBXnjCBFE?si=W9KdymYNWDlwDhU6
+
+##  References:
+
+GitHub (2025) GitHub Actions Documentation. Available at: https://docs.github.com/en/actions
+(Accessed: 28 April 2026).
+
+GitHub (2025) Building and testing Java with Gradle. Available at: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle (Accessed: 2 April 2026).
+
+Gradle Inc. (2025) Gradle User Manual. Available at: https://docs.gradle.org
+(Accessed: 20 April 2026).
+
+Android Developers (2025) Build your app from the command line. Available at: https://developer.android.com/studio/build/building-cmdline
+(Accessed: 20 April 2026).
+
+Android Developers (2025) Android App Bundles. Available at: https://developer.android.com/guide/app-bundle
+(Accessed: 20 April 2026).
+
+OpenJDK (2025) JDK Installation Guide. Available at: https://openjdk.org
+(Accessed: 20 April 2026).
+
+Git (2025) Git Documentation. Available at: https://git-scm.com/docs
+(Accessed: 28 April 2026).
+
+PDFSimpli (2026) Free Text to Speech Tool. Available at: https://pdfsimpli.com/lp/text-to-speech/?uh=Free%20Text%20to%20Speech&account=242-758-0902&utm_source=google&utm_medium=sem&utm_campaign=23663256363&utm_term=free%20text%20to%20speech&network=g&device=m&adposition=&adgroupid=195118460795&placement=&location=1028995&gad_source=1&gad_campaignid=23663256363&gclid=CjwKCAjwtcHPBhADEiwAWo3sJvUwKF66zh7VoH9qiwHGzWXQv46omaWkCe8dHgvudk9r-M0YXGZ-PBoC_W8QAvD_BwE
+(Accessed: 28 April 2026).
