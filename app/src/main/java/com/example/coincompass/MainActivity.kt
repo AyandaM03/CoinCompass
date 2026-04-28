@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.coincompass.ui.HistoryActivity
 import com.example.coincompass.data.AppDatabase
 import com.example.coincompass.data.CategorySummary
 import com.example.coincompass.databinding.ActivityMainBinding
