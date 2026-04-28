@@ -1,3 +1,5 @@
+permissions:
+  contents: write
 name: Generated APK AAB (Push Github - Create Artifact To Github Action)
 
 env:
@@ -119,9 +121,10 @@ jobs:
         run: ls -la ${{ env.build_output_path }}/
 
       # Commit and push build outputs
-      - name: Commit & Push outputs
-        run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git add ${{ env.build_output_path }}/ -f
-          git diff --cached --quiet || (git commit -m "ci: upload build outputs - ${{ env.date_today }} [skip ci]" && git push)
+     - name: Commit & Push build outputs to GitHub
+  run: |
+    git config user.name "github-actions[bot]"
+    git config user.email "github-actions[bot]@users.noreply.github.com"
+    git add ${{ env.build_output_path }}/ -f
+    git diff --cached --quiet || git commit -m "ci: upload build outputs - ${{ env.date_today }} [skip ci]"
+    git push
