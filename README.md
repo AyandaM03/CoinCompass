@@ -13,7 +13,23 @@ Professional Splash Screen: "Navigate Your Finances" is our tagline and the app 
 • Category Management: To arrange your expenditures, create and maintain unique expense categories (such as groceries, entertainment, and car fuel).  
 • Detailed Expense Tracking: Keep track of all expenses, including start and end times, amounts, dates, and descriptions.  
 • Financial Overview: Use visual progress bars to keep track of how much of your money you've spent in each category. • Expense History: A special area where you can see and examine all your previous transactions. 
-• Savings Summary: To make sure you meet your financial objectives, monitor your monthly expenditure caps. .
+• Savings Summary: To make sure you meet your financial objectives, monitor your monthly expenditure caps. 
+
+##  App Screenshots
+<img width="1080" height="2340" alt="image" src="https://github.com/user-attachments/assets/6edb39d9-c435-4824-9556-8f46c222bc71" />
+<img width="738" height="1600" alt="image" src="https://github.com/user-attachments/assets/77f99f7e-cdea-4428-a412-9c41279b81e5" />
+<img width="738" height="1600" alt="image" src="https://github.com/user-attachments/assets/aabf051c-1fa3-4de9-83bc-dd475b9e6c0d" />
+<img width="1080" height="2340" alt="image" src="https://github.com/user-attachments/assets/f4860ce8-f876-4943-abec-5fb47e7318e3" />
+<img width="1080" height="2226" alt="image" src="https://github.com/user-attachments/assets/8cc4db65-8154-4f2a-bd6d-bfbed716fabe" />
+<img width="1080" height="2172" alt="image" src="https://github.com/user-attachments/assets/e8e982f0-05d1-4daa-9b26-2fb1a411effc" />
+<img width="1080" height="2258" alt="image" src="https://github.com/user-attachments/assets/3ac7c3b9-fdba-4d98-9e3c-4b8f56b24f1f" />
+
+
+
+
+
+
+
 
 ## Tech Stack
 
