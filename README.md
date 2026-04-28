@@ -23,11 +23,7 @@ Professional Splash Screen: "Navigate Your Finances" is our tagline and the app 
 <img width="1080" height="2226" alt="image" src="https://github.com/user-attachments/assets/8cc4db65-8154-4f2a-bd6d-bfbed716fabe" />
 <img width="1080" height="2172" alt="image" src="https://github.com/user-attachments/assets/e8e982f0-05d1-4daa-9b26-2fb1a411effc" />
 <img width="1080" height="2258" alt="image" src="https://github.com/user-attachments/assets/3ac7c3b9-fdba-4d98-9e3c-4b8f56b24f1f" />
-
-
-
-
-
+<img width="1080" height="2283" alt="image" src="https://github.com/user-attachments/assets/ac91beca-bad7-4b48-b444-0e92bd9cafae" />
 
 
 
