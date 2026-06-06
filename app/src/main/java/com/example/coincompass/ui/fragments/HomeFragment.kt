@@ -17,7 +17,6 @@ import com.example.coincompass.databinding.FragmentHomeBinding
 import com.example.coincompass.databinding.ItemBudgetCategoryBinding
 import com.example.coincompass.ui.AddCategoryActivity
 import com.example.coincompass.ui.AddExpenseActivity
-import com.example.coincompass.ui.HistoryActivity
 import com.example.coincompass.ui.LoginActivity
 import com.example.coincompass.ui.SetGoalActivity
 import java.util.Calendar
@@ -57,11 +56,17 @@ class HomeFragment : Fragment() {
         }
 
         binding.btnHistory.setOnClickListener {
-            androidx.navigation.fragment.findNavController().navigate(R.id.nav_calendar)
+            findNavController().navigate(R.id.nav_calendar)
         }
 
         // Logout button logic
         binding.btnLogout.setOnClickListener {
+            val sharedPref = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+            sharedPref.edit()
+                .remove("remember_me")
+                .remove("current_username")
+                .apply()
+
             val intent = Intent(requireContext(), LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)

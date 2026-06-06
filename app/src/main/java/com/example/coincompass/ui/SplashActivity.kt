@@ -67,7 +67,16 @@ class SplashActivity : AppCompatActivity() {
 
         // Move to the next screen after a delay
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this, LoginActivity::class.java))
+            val sharedPref = getSharedPreferences("user_prefs", MODE_PRIVATE)
+            val isRemembered = sharedPref.getBoolean("remember_me", false)
+            
+            val targetActivity = if (isRemembered) {
+                com.example.coincompass.MainActivity::class.java
+            } else {
+                LoginActivity::class.java
+            }
+            
+            startActivity(Intent(this, targetActivity))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         }, 3000)

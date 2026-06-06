@@ -8,53 +8,74 @@ import androidx.lifecycle.lifecycleScope
 import com.example.coincompass.MainActivity
 import com.example.coincompass.data.AppDatabase
 import com.example.coincompass.databinding.ActivityLoginBinding
+import com.example.coincompass.utils.SecurityUtils
 import kotlinx.coroutines.launch
 
-// This is the login screen where the user enters their username and password
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Inflate the layout so we can use view binding
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Get the database instance
         val db = AppDatabase.getDatabase(this)
+        val sharedPref = getSharedPreferences("user_prefs", MODE_PRIVATE)
 
-        // When the user clicks the sign in button
+        // Check if "Remember Me" was previously checked
+        val isRemembered = sharedPref.getBoolean("remember_me", false)
+        if (isRemembered) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         binding.signinButton.setOnClickListener {
-            val username = binding.usernameEdit.text.toString()
+            val emailOrUsername = binding.emailEdit.text.toString().trim()
             val password = binding.passwordEdit.text.toString()
 
-            // Check if they forgot to fill anything in
-            if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            if (emailOrUsername.isEmpty()) {
+                binding.emailLayout.error = "Please enter email or username"
                 return@setOnClickListener
+            } else {
+                binding.emailLayout.error = null
             }
 
-            // Look for the user in the database in a coroutine
+            if (password.isEmpty()) {
+                binding.passwordLayout.error = "Please enter password"
+                return@setOnClickListener
+            } else {
+                binding.passwordLayout.error = null
+            }
+
             lifecycleScope.launch {
-                val user = db.userDao().getUserByUsername(username)
-                // If we found them and the password matches
-                if (user != null && user.password == password) {
-                    // SAVE USERNAME FOR THE DASHBOARD
-                    val sharedPref = getSharedPreferences("user_prefs", MODE_PRIVATE)
-                    sharedPref.edit().putString("current_username", user.fullName).apply()
+                // Try finding by email first, then username
+                var user = db.userDao().getUserByEmail(emailOrUsername)
+                if (user == null) {
+                    user = db.userDao().getUserByUsername(emailOrUsername)
+                }
+
+                if (user != null && SecurityUtils.verifyPassword(password, user.password)) {
+                    // Save login state
+                    val editor = sharedPref.edit()
+                    editor.putString("current_username", user.fullName)
+                    editor.putBoolean("remember_me", binding.rememberMeCheckbox.isChecked)
+                    editor.apply()
 
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     startActivity(intent)
-                    finish() // Close login screen
+                    finish()
                 } else {
-                    // Show an error if it didn't work
-                    Toast.makeText(this@LoginActivity, "Invalid credentials", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@LoginActivity, "Invalid email/username or password", Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
-        // If they don't have an account, go to register screen
+        binding.forgotPassword.setOnClickListener {
+            Toast.makeText(this, "Password reset link sent to your email (Simulated)", Toast.LENGTH_LONG).show()
+        }
+
         binding.signupLink.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
