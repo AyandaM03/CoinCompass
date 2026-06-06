@@ -1,0 +1,87 @@
+name: Android CI - Build & Test
+
+permissions:
+  contents: read
+
+env:
+  main_project_module: app
+  playstore_name: CoinCompass
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
+on:
+  push:
+    branches:
+      - main
+      - 'release/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set date variable
+      - name: Set date
+        run: echo "date_today=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      # Set repository name
+      - name: Set repository name
+        run: echo "repository_name=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
+
+      # Setup Java
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: gradle
+
+      # Make Gradle executable
+      - name: Grant execute permission
+        run: chmod +x ./gradlew
+
+      # Run tests (does not fail build)
+      - name: Run tests
+        run: ./gradlew test
+        continue-on-error: true
+
+      # Build project
+      - name: Build project
+        run: ./gradlew build --no-daemon
+
+      # Build Debug APK
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+
+      # Build Release APK
+      - name: Build Release APK
+        run: ./gradlew assembleRelease
+
+      # Build AAB
+      - name: Build App Bundle (AAB)
+        run: ./gradlew ${{ env.main_project_module }}:bundleRelease
+
+      # Upload Debug APK
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.date_today }} - Debug APK
+          path: app/build/outputs/apk/debug/
+
+      # Upload Release APK
+      - name: Upload Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.date_today }} - Release APK
+          path: app/build/outputs/apk/release/
+
+      # Upload AAB
+      - name: Upload AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.date_today }} - AAB
+          path: app/build/outputs/bundle/release/

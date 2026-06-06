@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Basic colors -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- App Theme Colors (based on the screenshots) -->
+    <color name="dark_green">#1B4332</color>
+    <color name="mid_green">#2D6A4F</color>
+    <color name="light_green">#D8E2DC</color>
+    <color name="gold">#E9C46A</color>
+    <color name="soft_gold">#FFD460</color>
+    <color name="cream_input">#FEFAE0</color>
+    <color name="light_grey">#F5F5F5</color>
+    <color name="text_grey">#6C757D</color>
+    <color name="delete_red">#BA181B</color>
+
+    <!-- Old colors for backward compatibility if needed -->
+    <color name="primary">#1B4332</color>
+    <color name="primary_dark">#081C15</color>
+    <color name="accent">#E9C46A</color>
+    <color name="background">#F5F5F5</color>
+</resources>
