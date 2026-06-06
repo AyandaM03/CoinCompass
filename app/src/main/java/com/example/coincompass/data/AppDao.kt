@@ -29,6 +29,9 @@ interface ExpenseDao {
     @Insert
     suspend fun insert(expense: Expense)
 
+    @Delete
+    suspend fun delete(expense: Expense)
+
     @Query("SELECT * FROM expenses")
     fun getAllExpenses(): LiveData<List<Expense>>
 
@@ -57,6 +60,21 @@ interface GoalDao {
 
     @Query("SELECT * FROM goals WHERE month = :month LIMIT 1")
     fun getGoalForMonth(month: String): LiveData<Goal?>
+}
+
+@Dao
+interface SavingsGoalDao {
+    @Insert
+    suspend fun insert(goal: SavingsGoal)
+
+    @Update
+    suspend fun update(goal: SavingsGoal)
+
+    @Delete
+    suspend fun delete(goal: SavingsGoal)
+
+    @Query("SELECT * FROM savings_goals")
+    fun getAllSavingsGoals(): LiveData<List<SavingsGoal>>
 }
 
 data class CategorySummary(

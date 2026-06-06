@@ -4,19 +4,34 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
-    app:cardBackgroundColor="#F8F9FA"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="0dp">
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:padding="16dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/type_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@color/light_grey"
+            android:padding="12dp"
+            android:src="@drawable/ic_history"
+            app:shapeAppearanceOverlay="@style/CircleImage"
+            app:tint="@color/dark_green" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/expense_category"
@@ -24,33 +39,38 @@
                 android:layout_height="wrap_content"
                 android:text="Groceries"
                 android:textColor="@color/dark_green"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/expense_amount"
+                android:id="@+id/expense_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:text="R1200,00"
-                android:textColor="@color/black"
-                android:textStyle="bold" />
-        </RelativeLayout>
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Bought food for the week"
+                android:textColor="@color/text_grey"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/expense_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="2023-10-15"
+                android:textColor="@color/text_grey"
+                android:textSize="11sp" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/expense_desc"
+            android:id="@+id/expense_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Bought food for the week"
-            android:textColor="@color/text_grey" />
-
-        <TextView
-            android:id="@+id/expense_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="2023-10-15"
-            android:textSize="12sp" />
+            android:text="R1200.00"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -1,110 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:padding="24dp">
+    android:fillViewport="true">
 
-    <!-- Header: Title and Close Button -->
-    <TextView
-        android:id="@+id/header_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Expense"
-        android:textColor="@color/dark_green"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/btn_close"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/text_grey" />
-
-    <!-- Form Fields -->
-    <LinearLayout
-        android:id="@+id/form_container"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/header_title">
+        android:padding="24dp">
 
-        <!-- Category Dropdown -->
-        <Spinner
-            android:id="@+id/category_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginBottom="16dp"
-            android:background="@android:drawable/edit_text"
-            android:padding="8dp" />
+        <!-- Header: Title and Close Button -->
+        <TextView
+            android:id="@+id/header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Transaction"
+            android:textColor="@color/dark_green"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Description -->
-        <EditText
-            android:id="@+id/description_edit"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginBottom="16dp"
-            android:background="@android:drawable/edit_text"
-            android:hint="Description"
-            android:textColor="@color/black"
-            android:textColorHint="@color/text_grey"
-            android:padding="16dp" />
+        <ImageButton
+            android:id="@+id/btn_close"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/text_grey" />
 
-        <!-- Amount (R) -->
-        <EditText
-            android:id="@+id/amount_edit"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginBottom="16dp"
-            android:background="@android:drawable/edit_text"
-            android:drawableStart="@android:drawable/ic_menu_edit"
-            android:drawablePadding="12dp"
-            android:hint="Amount (R)"
-            android:inputType="numberDecimal"
-            android:textColor="@color/black"
-            android:textColorHint="@color/text_grey"
-            android:padding="16dp" />
-
-        <!-- Date -->
-        <EditText
-            android:id="@+id/date_edit"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginBottom="16dp"
-            android:background="@android:drawable/edit_text"
-            android:drawableEnd="@drawable/ic_goals"
-            android:hint="Date"
-            android:inputType="none"
-            android:focusable="false"
-            android:clickable="true"
-            android:textColor="@color/black"
-            android:textColorHint="@color/text_grey"
-            android:padding="16dp" />
-
-        <!-- Times row -->
+        <!-- Form Fields -->
         <LinearLayout
+            android:id="@+id/form_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="32dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/header_title">
 
-            <EditText
-                android:id="@+id/start_time_edit"
-                android:layout_width="0dp"
+            <!-- Type Selector -->
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/type_toggle_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:singleSelection="true"
+                app:selectionRequired="true"
+                app:checkedButton="@+id/btn_type_expense">
+                <Button
+                    android:id="@+id/btn_type_expense"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Expense" />
+                <Button
+                    android:id="@+id/btn_type_income"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Income" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <!-- Category Dropdown -->
+            <Spinner
+                android:id="@+id/category_spinner"
+                android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
+                android:layout_marginBottom="16dp"
                 android:background="@android:drawable/edit_text"
-                android:hint="Start Time"
+                android:padding="8dp" />
+
+            <!-- Description -->
+            <EditText
+                android:id="@+id/description_edit"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginBottom="16dp"
+                android:background="@android:drawable/edit_text"
+                android:hint="Description"
+                android:textColor="@color/black"
+                android:textColorHint="@color/text_grey"
+                android:padding="16dp" />
+
+            <!-- Amount (R) -->
+            <EditText
+                android:id="@+id/amount_edit"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginBottom="16dp"
+                android:background="@android:drawable/edit_text"
+                android:drawableStart="@android:drawable/ic_menu_edit"
+                android:drawablePadding="12dp"
+                android:hint="Amount (R)"
+                android:inputType="numberDecimal"
+                android:textColor="@color/black"
+                android:textColorHint="@color/text_grey"
+                android:padding="16dp" />
+
+            <!-- Date -->
+            <EditText
+                android:id="@+id/date_edit"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginBottom="16dp"
+                android:background="@android:drawable/edit_text"
+                android:drawableEnd="@drawable/ic_goals"
+                android:hint="Date"
                 android:inputType="none"
                 android:focusable="false"
                 android:clickable="true"
@@ -112,55 +120,78 @@
                 android:textColorHint="@color/text_grey"
                 android:padding="16dp" />
 
-            <EditText
-                android:id="@+id/end_time_edit"
-                android:layout_width="0dp"
+            <!-- Times row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/start_time_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:background="@android:drawable/edit_text"
+                    android:hint="Start Time"
+                    android:inputType="none"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/text_grey"
+                    android:padding="16dp" />
+
+                <EditText
+                    android:id="@+id/end_time_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:background="@android:drawable/edit_text"
+                    android:hint="End Time"
+                    android:inputType="none"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/text_grey"
+                    android:padding="16dp" />
+            </LinearLayout>
+
+            <!-- Attach Receipt -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_attach_receipt"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="#F8F9FA"
+                android:text="Attach Receipt Photo"
+                android:textColor="@color/gold"
+                app:cornerRadius="12dp" />
+
+            <!-- Preview of selected image -->
+            <ImageView
+                android:id="@+id/receipt_preview"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginBottom="32dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <!-- Save Button -->
+            <Button
+                android:id="@+id/save_expense_button"
+                android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:background="@android:drawable/edit_text"
-                android:hint="End Time"
-                android:inputType="none"
-                android:focusable="false"
-                android:clickable="true"
-                android:textColor="@color/black"
-                android:textColorHint="@color/text_grey"
-                android:padding="16dp" />
+                android:layout_marginBottom="24dp"
+                android:backgroundTint="@color/dark_green"
+                android:text="Save Transaction"
+                android:textAllCaps="false"
+                android:textColor="@color/gold"
+                android:textSize="18sp" />
+
         </LinearLayout>
 
-        <!-- Attach Receipt -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_attach_receipt"
-            style="@style/Widget.Material3.Button.TextButton"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="#F8F9FA"
-            android:text="Attach Receipt Photo"
-            android:textColor="@color/gold"
-            app:cornerRadius="12dp" />
-
-        <!-- Preview of selected image -->
-        <ImageView
-            android:id="@+id/receipt_preview"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginBottom="32dp"
-            android:scaleType="centerCrop"
-            android:visibility="gone" />
-
-    </LinearLayout>
-
-    <!-- Save Button -->
-    <Button
-        android:id="@+id/save_expense_button"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:backgroundTint="@color/dark_green"
-        android:text="Save Expense"
-        android:textAllCaps="false"
-        android:textColor="@color/gold"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

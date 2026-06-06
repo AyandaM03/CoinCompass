@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_green"
+    android:paddingTop="32dp"
     tools:context=".ui.LoginActivity">
 
     <!-- This is the logo image at the top -->
@@ -72,7 +73,8 @@
             android:background="@android:drawable/edit_text"
             android:hint="Enter username"
             android:padding="16dp"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textColorHint="@color/black" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -91,7 +93,8 @@
             android:hint="********"
             android:inputType="textPassword"
             android:padding="16dp"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textColorHint="@color/black" />
 
         <TextView
             android:id="@+id/forgot_password"

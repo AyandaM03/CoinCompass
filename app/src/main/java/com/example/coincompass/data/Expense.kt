@@ -10,7 +10,8 @@ data class Expense(
     val startTime: String, // HH:mm
     val endTime: String, // HH:mm
     val description: String,
-    val categoryName: String, // Simplified for now, or use categoryId
+    val categoryName: String,
     val amount: Double,
+    val type: String = "Expense", // "Income" or "Expense"
     val photoPath: String? = null
 )
