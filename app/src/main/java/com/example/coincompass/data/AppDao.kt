@@ -40,7 +40,15 @@ interface ExpenseDao {
 
     @Query("SELECT categoryName, SUM(amount) as totalAmount FROM expenses WHERE date BETWEEN :startDate AND :endDate GROUP BY categoryName")
     fun getCategorySummaries(startDate: String, endDate: String): LiveData<List<CategorySummary>>
+
+    @Query("SELECT date, SUM(amount) as totalAmount FROM expenses GROUP BY date ORDER BY date ASC")
+    fun getDailySpending(): LiveData<List<DailySpending>>
 }
+
+data class DailySpending(
+    val date: String,
+    val totalAmount: Double
+)
 
 @Dao
 interface GoalDao {

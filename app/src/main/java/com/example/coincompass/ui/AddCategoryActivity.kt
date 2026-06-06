@@ -43,13 +43,16 @@ class AddCategoryActivity : AppCompatActivity() {
         // When the "Add Category" button is clicked
         binding.addCategoryButton.setOnClickListener {
             val name = binding.categoryNameEdit.text.toString().trim()
+            val budgetStr = binding.categoryBudgetEdit.text.toString().trim()
 
             if (name.isNotEmpty()) {
+                val budget = budgetStr.toDoubleOrNull() ?: 0.0
                 // Save to database in a background thread
                 lifecycleScope.launch {
-                    val newCategory = Category(name = name)
+                    val newCategory = Category(name = name, budgetAmount = budget)
                     db.categoryDao().insert(newCategory)
                     binding.categoryNameEdit.text.clear() // Clear the input after saving
+                    binding.categoryBudgetEdit.text.clear()
                     Toast.makeText(this@AddCategoryActivity, "Category saved!", Toast.LENGTH_SHORT).show()
                 }
             } else {

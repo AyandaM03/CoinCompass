@@ -64,6 +64,18 @@
                 android:textColorHint="@color/text_grey"
                 android:padding="16dp" />
 
+            <EditText
+                android:id="@+id/category_budget_edit"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="12dp"
+                android:background="@android:drawable/edit_text"
+                android:hint="Monthly Budget Amount (R)"
+                android:inputType="numberDecimal"
+                android:textColor="@color/black"
+                android:textColorHint="@color/text_grey"
+                android:padding="16dp" />
+
             <Button
                 android:id="@+id/add_category_button"
                 android:layout_width="match_parent"
