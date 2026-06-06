@@ -1,6 +1,7 @@
 package com.example.coincompass.ui.fragments
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -66,15 +67,15 @@ class TransactionsFragment : Fragment() {
         })
 
         binding.filterChipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
-            currentFilter = when (checkedIds.firstOrNull()) {
-                R.id.chip_income -> "Income"
-                R.id.chip_expense -> "Expense"
-                R.id.chip_sort_date -> {
-                    isSortDescending = !isSortDescending
-                    applyFilters()
-                    return@setOnCheckedStateChangeListener
+            val checkedId = checkedIds.firstOrNull()
+            if (checkedId == R.id.chip_sort_date) {
+                isSortDescending = !isSortDescending
+            } else {
+                currentFilter = when (checkedId) {
+                    R.id.chip_income -> "Income"
+                    R.id.chip_expense -> "Expense"
+                    else -> "All"
                 }
-                else -> "All"
             }
             applyFilters()
         }
@@ -82,7 +83,7 @@ class TransactionsFragment : Fragment() {
 
     private fun observeData() {
         db.expenseDao().getAllExpenses().observe(viewLifecycleOwner) { expenses ->
-            allTransactions = expenses
+            allTransactions = expenses ?: emptyList()
             applyFilters()
         }
     }
@@ -141,13 +142,13 @@ class TransactionsFragment : Fragment() {
                 holder.binding.expenseAmount.text = "+R${"%.2f".format(item.amount)}"
                 holder.binding.expenseAmount.setTextColor(ContextCompat.getColor(requireContext(), R.color.mid_green))
                 holder.binding.typeIcon.setImageResource(R.drawable.ic_add)
-                holder.binding.typeIcon.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.light_green))
+                holder.binding.typeIcon.background.setTint(ContextCompat.getColor(requireContext(), R.color.light_green))
                 holder.binding.typeIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.dark_green))
             } else {
                 holder.binding.expenseAmount.text = "-R${"%.2f".format(item.amount)}"
                 holder.binding.expenseAmount.setTextColor(ContextCompat.getColor(requireContext(), R.color.delete_red))
                 holder.binding.typeIcon.setImageResource(R.drawable.ic_history)
-                holder.binding.typeIcon.setBackgroundColor(Color.parseColor("#FFEBEE"))
+                holder.binding.typeIcon.background.setTint(Color.parseColor("#FFEBEE"))
                 holder.binding.typeIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.delete_red))
             }
 
@@ -162,8 +163,4 @@ class TransactionsFragment : Fragment() {
 
         inner class ViewHolder(val binding: ItemExpenseBinding) : RecyclerView.ViewHolder(binding.root)
     }
-}
-
-private fun android.widget.ImageView.setBackgroundColor(color: Int) {
-    this.background.setTint(color)
 }

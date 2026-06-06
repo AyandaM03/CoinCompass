@@ -33,6 +33,6 @@
         android:id="@+id/nav_transactions"
         android:name="com.example.coincompass.ui.fragments.TransactionsFragment"
         android:label="Transactions"
-        tools:layout="@layout/fragment_placeholder" />
+        tools:layout="@layout/fragment_transactions" />
 
 </navigation>
