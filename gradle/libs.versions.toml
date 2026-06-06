@@ -14,6 +14,7 @@ ksp = "2.3.2"
 lifecycle = "2.8.7"
 navigation = "2.8.7"
 mpandroidchart = "3.1.0"
+material-calendarview = "2.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -32,6 +33,7 @@ lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-lived
 navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
 navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
 mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", version.ref = "mpandroidchart" }
+calendarview = { group = "com.github.prolificinteractive", name = "material-calendarview", version.ref = "material-calendarview" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

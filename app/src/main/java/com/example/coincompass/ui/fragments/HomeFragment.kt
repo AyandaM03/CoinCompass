@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.coincompass.R
 import com.example.coincompass.data.AppDatabase
 import com.example.coincompass.data.CategorySummary
 import com.example.coincompass.databinding.FragmentHomeBinding
@@ -55,7 +57,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.btnHistory.setOnClickListener {
-            startActivity(Intent(requireContext(), HistoryActivity::class.java))
+            androidx.navigation.fragment.findNavController().navigate(R.id.nav_calendar)
         }
 
         // Logout button logic

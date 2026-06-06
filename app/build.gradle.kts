@@ -57,6 +57,9 @@ dependencies {
 
     // Charts
     implementation(libs.mpandroidchart)
+    
+    // Calendar
+    implementation(libs.calendarview)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
