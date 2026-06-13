@@ -1,19 +1,29 @@
 package com.example.coincompass.ui.fragments
 
+import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.coincompass.R
 import com.example.coincompass.data.AppDatabase
+import com.example.coincompass.data.CategorySummary
 import com.example.coincompass.databinding.FragmentAnalyticsBinding
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import com.google.android.material.datepicker.MaterialDatePicker
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -22,6 +32,10 @@ class AnalyticsFragment : Fragment() {
     private var _binding: FragmentAnalyticsBinding? = null
     private val binding get() = _binding!!
     private lateinit var db: AppDatabase
+    
+    private var startDate: String = ""
+    private var endDate: String = ""
+    private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentAnalyticsBinding.inflate(inflater, container, false)
@@ -30,183 +44,146 @@ class AnalyticsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        try {
-            db = AppDatabase.getDatabase(requireContext())
-            setupCharts()
-            observeData()
-        } catch (e: Exception) {
-            Log.e("AnalyticsFragment", "Error in onViewCreated", e)
-        }
+        db = AppDatabase.getDatabase(requireContext())
+        
+        setupBarChart()
+        setupListeners()
+        
+        // Initial load: 7 days
+        updatePeriod(Period.LAST_7_DAYS)
     }
 
-    private fun setupCharts() {
-        binding.incomeExpenseChart.apply {
+    private fun setupBarChart() {
+        binding.categoryBarChart.apply {
             description.isEnabled = false
             setDrawGridBackground(false)
             setDrawBarShadow(false)
+            setTouchEnabled(true)
+            setPinchZoom(false)
+            isDoubleTapToZoomEnabled = false
+            setScaleEnabled(false)
+            
             xAxis.apply {
                 position = XAxis.XAxisPosition.BOTTOM
                 setDrawGridLines(false)
+                textColor = Color.BLACK
                 granularity = 1f
+                labelRotationAngle = -45f
             }
+            
             axisLeft.apply {
                 setDrawGridLines(true)
+                textColor = Color.BLACK
                 axisMinimum = 0f
             }
-            axisRight.isEnabled = false
-            legend.isEnabled = true
-        }
-
-        binding.spendingTrendChart.apply {
-            description.isEnabled = false
-            setDrawGridBackground(false)
-            xAxis.apply {
-                position = XAxis.XAxisPosition.BOTTOM
-                setDrawGridLines(false)
-            }
-            axisLeft.apply {
-                setDrawGridLines(true)
-                axisMinimum = 0f
-            }
+            
             axisRight.isEnabled = false
             legend.isEnabled = false
+            animateY(1000)
+
+            setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+                override fun onValueSelected(e: com.github.mikephil.charting.data.Entry?, h: Highlight?) {
+                    if (e != null) {
+                        val category = xAxis.valueFormatter.getFormattedValue(e.x, xAxis)
+                        Toast.makeText(requireContext(), "$category: R${"%.2f".format(e.y)}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                override fun onNothingSelected() {}
+            })
         }
     }
 
-    private fun observeData() {
-        db.expenseDao().getAllExpenses().observe(viewLifecycleOwner) { expenses ->
-            try {
-                if (expenses == null || expenses.isEmpty()) {
-                    binding.netWorthAmount.text = "R0.00"
-                    binding.avgIncomeAmount.text = "R0.00"
-                    binding.avgExpenseAmount.text = "R0.00"
-                    binding.comparisonText.text = "No data yet"
-                    binding.comparisonIcon.visibility = View.GONE
-                    return@observe
-                }
-
-                val totalSpent = expenses.sumOf { it.amount }
-                
-                // Monthly Comparison
-                val calendar = Calendar.getInstance()
-                val currentMonth = SimpleDateFormat("yyyy-MM", Locale.getDefault()).format(calendar.time)
-                calendar.add(Calendar.MONTH, -1)
-                val lastMonth = SimpleDateFormat("yyyy-MM", Locale.getDefault()).format(calendar.time)
-                
-                val currentMonthSpent = expenses.filter { it.date.startsWith(currentMonth) }.sumOf { it.amount }
-                val lastMonthSpent = expenses.filter { it.date.startsWith(lastMonth) }.sumOf { it.amount }
-                
-                val diffPercent = if (lastMonthSpent > 0) {
-                    (((currentMonthSpent - lastMonthSpent) / lastMonthSpent) * 100).toInt()
-                } else {
-                    0
-                }
-
-                binding.comparisonIcon.visibility = View.VISIBLE
-                if (diffPercent > 0) {
-                    binding.comparisonText.text = "+$diffPercent% from last month"
-                    binding.comparisonIcon.setImageResource(android.R.drawable.arrow_up_float)
-                    binding.comparisonIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.delete_red))
-                    binding.comparisonText.setTextColor(ContextCompat.getColor(requireContext(), R.color.delete_red))
-                } else if (diffPercent < 0) {
-                    binding.comparisonText.text = "$diffPercent% from last month"
-                    binding.comparisonIcon.setImageResource(android.R.drawable.arrow_down_float)
-                    binding.comparisonIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.mid_green))
-                    binding.comparisonText.setTextColor(ContextCompat.getColor(requireContext(), R.color.mid_green))
-                } else {
-                    binding.comparisonText.text = "Same as last month"
-                    binding.comparisonIcon.visibility = View.GONE
-                }
-
-                // Stats
-                val uniqueMonths = expenses.map { it.date.substring(0, 7) }.distinct().size
-                val avgSpent = if (uniqueMonths > 1) totalSpent / uniqueMonths else totalSpent
-
-                val income = 0.0 
-                val avgIncome = 0.0
-                val netWorth = income - totalSpent
-
-                binding.avgIncomeAmount.text = "R${"%.2f".format(avgIncome)}"
-                binding.avgExpenseAmount.text = "R${"%.2f".format(avgSpent)}"
-                binding.netWorthAmount.text = "R${"%.2f".format(netWorth)}"
-
-                if (netWorth >= 0) {
-                    binding.netWorthAmount.setTextColor(Color.WHITE)
-                } else {
-                    binding.netWorthAmount.setTextColor(ContextCompat.getColor(requireContext(), R.color.gold))
-                }
-
-                updateCharts(expenses)
-            } catch (e: Exception) {
-                Log.e("AnalyticsFragment", "Error observing data", e)
+    private fun setupListeners() {
+        binding.filterChipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
+            when (checkedIds.firstOrNull()) {
+                R.id.chip_7_days -> updatePeriod(Period.LAST_7_DAYS)
+                R.id.chip_30_days -> updatePeriod(Period.LAST_30_DAYS)
+                R.id.chip_3_months -> updatePeriod(Period.LAST_3_MONTHS)
+                R.id.chip_custom -> showCustomDateRangePicker()
             }
         }
     }
 
-    private fun updateCharts(expenses: List<com.example.coincompass.data.Expense>) {
-        try {
-            updateBarChart(expenses)
-            updateLineChart(expenses)
-        } catch (e: Exception) {
-            Log.e("AnalyticsFragment", "Error updating charts", e)
-        }
-    }
-
-    private fun updateBarChart(expenses: List<com.example.coincompass.data.Expense>) {
-        val entries = ArrayList<BarEntry>()
-        val totalSpent = expenses.sumOf { it.amount }.toFloat()
-        val totalIncome = 0f
-
-        entries.add(BarEntry(0f, totalIncome))
-        entries.add(BarEntry(1f, totalSpent))
-
-        val dataSet = BarDataSet(entries, "Financial Overview")
-        dataSet.colors = listOf(
-            ContextCompat.getColor(requireContext(), R.color.mid_green),
-            ContextCompat.getColor(requireContext(), R.color.delete_red)
-        )
-        dataSet.valueTextColor = ContextCompat.getColor(requireContext(), R.color.dark_green)
-        dataSet.valueTextSize = 12f
-
-        val data = BarData(dataSet)
-        binding.incomeExpenseChart.data = data
-        binding.incomeExpenseChart.xAxis.valueFormatter = IndexAxisValueFormatter(listOf("Income", "Expenses"))
-        binding.incomeExpenseChart.invalidate()
-    }
-
-    private fun updateLineChart(expenses: List<com.example.coincompass.data.Expense>) {
-        val grouped = expenses.groupBy { it.date }
-            .mapValues { it.value.sumOf { e -> e.amount }.toFloat() }
-            .toSortedMap()
-
-        val entries = ArrayList<Entry>()
-        val labels = ArrayList<String>()
-        var index = 0f
+    private fun updatePeriod(period: Period) {
+        val calendar = Calendar.getInstance()
+        endDate = sdf.format(calendar.time)
         
-        grouped.forEach { (date, amount) ->
-            entries.add(Entry(index, amount))
-            if (date.length >= 10) {
-                labels.add(date.substring(5))
+        when (period) {
+            Period.LAST_7_DAYS -> calendar.add(Calendar.DAY_OF_YEAR, -7)
+            Period.LAST_30_DAYS -> calendar.add(Calendar.DAY_OF_YEAR, -30)
+            Period.LAST_3_MONTHS -> calendar.add(Calendar.MONTH, -3)
+            else -> {}
+        }
+        
+        startDate = sdf.format(calendar.time)
+        fetchData()
+    }
+
+    private fun showCustomDateRangePicker() {
+        val picker = MaterialDatePicker.Builder.dateRangePicker()
+            .setTitleText("Select date range")
+            .setSelection(Pair(MaterialDatePicker.todayInUtcMilliseconds(), MaterialDatePicker.todayInUtcMilliseconds()))
+            .build()
+            
+        picker.addOnPositiveButtonClickListener { range ->
+            startDate = sdf.format(Date(range.first))
+            endDate = sdf.format(Date(range.second))
+            fetchData()
+        }
+        picker.show(childFragmentManager, "CUSTOM_RANGE")
+    }
+
+    private fun fetchData() {
+        binding.loadingIndicator.visibility = View.VISIBLE
+        binding.chartCard.visibility = View.GONE
+        binding.emptyStateLayout.visibility = View.GONE
+        binding.insightsCard.visibility = View.GONE
+
+        // Query summaries
+        db.expenseDao().getCategorySummaries(startDate, endDate).observe(viewLifecycleOwner) { summaries ->
+            binding.loadingIndicator.visibility = View.GONE
+            if (summaries.isNullOrEmpty()) {
+                binding.emptyStateLayout.visibility = View.VISIBLE
             } else {
-                labels.add(date)
+                binding.chartCard.visibility = View.VISIBLE
+                binding.insightsCard.visibility = View.VISIBLE
+                updateUI(summaries)
             }
-            index++
+        }
+    }
+
+    private fun updateUI(summaries: List<CategorySummary>) {
+        val entries = summaries.mapIndexed { index, summary ->
+            BarEntry(index.toFloat(), summary.totalAmount.toFloat())
         }
 
-        val dataSet = LineDataSet(entries, "Daily Spending")
-        dataSet.color = ContextCompat.getColor(requireContext(), R.color.mid_green)
-        dataSet.setCircleColor(ContextCompat.getColor(requireContext(), R.color.dark_green))
-        dataSet.lineWidth = 2f
-        dataSet.circleRadius = 4f
-        dataSet.setDrawCircleHole(false)
-        dataSet.valueTextSize = 10f
-        dataSet.setDrawFilled(true)
-        dataSet.fillColor = ContextCompat.getColor(requireContext(), R.color.light_green)
+        val dataSet = BarDataSet(entries, "Spending")
+        // Use CoinCompass Analytics Blue
+        dataSet.color = Color.parseColor("#1976D2") 
+        dataSet.valueTextColor = Color.BLACK
+        dataSet.valueTextSize = 12f
+        dataSet.valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return "R${"%.0f".format(value)}"
+            }
+        }
 
-        val data = LineData(dataSet)
-        binding.spendingTrendChart.data = data
-        binding.spendingTrendChart.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
-        binding.spendingTrendChart.invalidate()
+        binding.categoryBarChart.apply {
+            data = BarData(dataSet)
+            xAxis.valueFormatter = IndexAxisValueFormatter(summaries.map { it.categoryName })
+            notifyDataSetChanged()
+            invalidate()
+            animateY(800)
+        }
+
+        // Insights
+        val topCategory = summaries.maxByOrNull { it.totalAmount }
+        binding.topCategoryText.text = topCategory?.categoryName ?: "--"
+        binding.totalPeriodAmount.text = "R${"%.2f".format(summaries.sumOf { it.totalAmount })}"
+    }
+
+    enum class Period {
+        LAST_7_DAYS, LAST_30_DAYS, LAST_3_MONTHS, CUSTOM
     }
 
     override fun onDestroyView() {

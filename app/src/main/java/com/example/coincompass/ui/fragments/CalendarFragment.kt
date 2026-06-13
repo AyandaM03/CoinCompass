@@ -3,6 +3,8 @@ package com.example.coincompass.ui.fragments
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +34,8 @@ class CalendarFragment : Fragment() {
     private lateinit var adapter: TransactionAdapter
     
     private var allTransactions: List<Expense> = emptyList()
-    private var selectedDateStr = ""
+    private var currentSearchQuery = ""
+    private var currentTypeFilter = "All"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCalendarBinding.inflate(inflater, container, false)
@@ -45,6 +48,7 @@ class CalendarFragment : Fragment() {
 
         setupRecyclerView()
         setupCalendar()
+        setupListeners()
         observeData()
 
         binding.fabAdd.setOnClickListener {
@@ -54,68 +58,67 @@ class CalendarFragment : Fragment() {
 
     private fun setupRecyclerView() {
         adapter = TransactionAdapter()
-        binding.dayTransactionsRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.dayTransactionsRecycler.adapter = adapter
+        binding.historyRecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.historyRecycler.adapter = adapter
     }
 
     private fun setupCalendar() {
-        val today = CalendarDay.today()
-        binding.calendarView.selectedDate = today
-        updateSelectedDateText(today)
-        
         binding.calendarView.setOnDateChangedListener { _, date, _ ->
-            updateSelectedDateText(date)
-            filterTransactionsByDate(date)
+            // Filter list by selected date if needed, or just highlight
         }
     }
 
-    private fun updateSelectedDateText(date: CalendarDay) {
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val cal = Calendar.getInstance()
-        cal.set(date.year, date.month - 1, date.day)
-        selectedDateStr = sdf.format(cal.time)
-        
-        val displaySdf = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
-        binding.selectedDateText.text = displaySdf.format(cal.time)
+    private fun setupListeners() {
+        binding.searchEdit.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                currentSearchQuery = s.toString().lowercase()
+                applyFilters()
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        binding.filterChipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
+            currentTypeFilter = when (checkedIds.firstOrNull()) {
+                R.id.chip_income -> "Income"
+                R.id.chip_expense -> "Expense"
+                else -> "All"
+            }
+            applyFilters()
+        }
     }
 
     private fun observeData() {
         db.expenseDao().getAllExpenses().observe(viewLifecycleOwner) { expenses ->
             allTransactions = expenses ?: emptyList()
             updateCalendarDecorators()
-            val today = binding.calendarView.selectedDate
-            if (today != null) filterTransactionsByDate(today)
+            applyFilters()
         }
     }
 
     private fun updateCalendarDecorators() {
-        val datesWithTransactions = allTransactions.map { 
-            val parts = it.date.split("-")
-            CalendarDay.from(parts[0].toInt(), parts[1].toInt(), parts[2].toInt())
-        }.toSet()
+        val incomeDates = allTransactions.filter { it.type == "Income" }.map { parseDate(it.date) }.toSet()
+        val expenseDates = allTransactions.filter { it.type == "Expense" }.map { parseDate(it.date) }.toSet()
 
         binding.calendarView.removeDecorators()
-        binding.calendarView.addDecorator(EventDecorator(ContextCompat.getColor(requireContext(), R.color.mid_green), datesWithTransactions))
+        binding.calendarView.addDecorator(EventDecorator(ContextCompat.getColor(requireContext(), R.color.primary_green), incomeDates))
+        binding.calendarView.addDecorator(EventDecorator(ContextCompat.getColor(requireContext(), R.color.cat_food), expenseDates))
     }
 
-    private fun filterTransactionsByDate(date: CalendarDay) {
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val cal = Calendar.getInstance()
-        cal.set(date.year, date.month - 1, date.day)
-        val dateStr = sdf.format(cal.time)
+    private fun parseDate(dateStr: String): CalendarDay {
+        val parts = dateStr.split("-")
+        return CalendarDay.from(parts[0].toInt(), parts[1].toInt(), parts[2].toInt())
+    }
 
-        val filtered = allTransactions.filter { it.date == dateStr }
-        adapter.submitList(filtered)
-
-        val total = filtered.sumOf { if (it.type == "Income") it.amount else -it.amount }
-        binding.dailyTotalText.text = "R${"%.2f".format(total)}"
-        binding.transactionCountText.text = "${filtered.size} items"
+    private fun applyFilters() {
+        val filtered = allTransactions.filter {
+            val matchesSearch = it.description.lowercase().contains(currentSearchQuery) || 
+                              it.categoryName.lowercase().contains(currentSearchQuery)
+            val matchesType = currentTypeFilter == "All" || it.type == currentTypeFilter
+            matchesSearch && matchesType
+        }.sortedByDescending { it.date }
         
-        if (total >= 0) {
-            binding.dailyTotalText.setTextColor(Color.WHITE)
-        } else {
-            binding.dailyTotalText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gold))
-        }
+        adapter.submitList(filtered)
     }
 
     override fun onDestroyView() {
@@ -144,16 +147,16 @@ class CalendarFragment : Fragment() {
             
             if (item.type == "Income") {
                 holder.binding.expenseAmount.text = "+R${"%.2f".format(item.amount)}"
-                holder.binding.expenseAmount.setTextColor(ContextCompat.getColor(requireContext(), R.color.mid_green))
+                holder.binding.expenseAmount.setTextColor(ContextCompat.getColor(requireContext(), R.color.primary_green))
                 holder.binding.typeIcon.setImageResource(R.drawable.ic_add)
                 holder.binding.typeIcon.background.setTint(ContextCompat.getColor(requireContext(), R.color.light_green))
-                holder.binding.typeIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.dark_green))
+                holder.binding.typeIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.primary_green))
             } else {
                 holder.binding.expenseAmount.text = "-R${"%.2f".format(item.amount)}"
-                holder.binding.expenseAmount.setTextColor(ContextCompat.getColor(requireContext(), R.color.delete_red))
+                holder.binding.expenseAmount.setTextColor(ContextCompat.getColor(requireContext(), R.color.cat_food))
                 holder.binding.typeIcon.setImageResource(R.drawable.ic_history)
                 holder.binding.typeIcon.background.setTint(Color.parseColor("#FFEBEE"))
-                holder.binding.typeIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.delete_red))
+                holder.binding.typeIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.cat_food))
             }
 
             holder.itemView.setOnClickListener {
@@ -170,7 +173,7 @@ class CalendarFragment : Fragment() {
     class EventDecorator(private val color: Int, private val dates: Collection<CalendarDay>) : DayViewDecorator {
         override fun shouldDecorate(day: CalendarDay): Boolean = dates.contains(day)
         override fun decorate(view: DayViewFacade) {
-            view.addSpan(DotSpan(5f, color))
+            view.addSpan(DotSpan(8f, color))
         }
     }
 }

@@ -1,44 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/transaction_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
     app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="20dp"
+    app:cardCornerRadius="16dp"
     app:cardElevation="2dp"
     app:strokeWidth="0dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
         android:padding="16dp">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/type_icon"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/icon_container"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@color/light_grey"
-            android:padding="12dp"
-            android:src="@drawable/ic_history"
-            app:shapeAppearanceOverlay="@style/CircleImage"
-            app:tint="@color/dark_green" />
+            app:cardBackgroundColor="@color/soft_mint"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/type_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_categories"
+                app:tint="@color/primary_green" />
+        </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
+            android:id="@+id/text_group"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_marginEnd="12dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/expense_amount"
+            app:layout_constraintStart_toEndOf="@id/icon_container"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/expense_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Groceries"
-                android:textColor="@color/dark_green"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -49,7 +64,7 @@
                 android:layout_marginTop="2dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="Bought food for the week"
+                android:text="Checkers Hyper"
                 android:textColor="@color/text_grey"
                 android:textSize="13sp" />
 
@@ -58,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="2023-10-15"
+                android:text="09 Jun 2026"
                 android:textColor="@color/text_grey"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -67,10 +82,25 @@
             android:id="@+id/expense_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="R1200.00"
+            android:text="-R0.00"
             android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/img_indicator"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="4dp"
+            android:src="@android:drawable/ic_menu_gallery"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/expense_amount"
+            app:layout_constraintTop_toBottomOf="@id/expense_amount"
+            app:tint="@color/text_grey"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

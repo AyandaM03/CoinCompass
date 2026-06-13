@@ -1,11 +1,11 @@
 package com.example.coincompass.ui.fragments
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +16,9 @@ import com.example.coincompass.data.AppDatabase
 import com.example.coincompass.data.SavingsGoal
 import com.example.coincompass.databinding.FragmentSavingsBinding
 import com.example.coincompass.databinding.ItemSavingsGoalBinding
+import com.example.coincompass.databinding.DialogAddSavingsGoalBinding
+import com.example.coincompass.databinding.DialogAddFundsBinding
+import com.example.coincompass.ui.AddSavingsGoalActivity
 import kotlinx.coroutines.launch
 
 class SavingsFragment : Fragment() {
@@ -38,7 +41,7 @@ class SavingsFragment : Fragment() {
         observeData()
 
         binding.fabAddGoal.setOnClickListener {
-            showAddGoalDialog()
+            startActivity(Intent(requireContext(), AddSavingsGoalActivity::class.java))
         }
     }
 
@@ -50,34 +53,40 @@ class SavingsFragment : Fragment() {
 
     private fun observeData() {
         db.savingsGoalDao().getAllSavingsGoals().observe(viewLifecycleOwner) { goals ->
-            adapter.submitList(goals)
+            if (goals == null || goals.isEmpty()) {
+                binding.emptyState.root.visibility = View.VISIBLE
+                binding.savingsRecycler.visibility = View.GONE
+            } else {
+                binding.emptyState.root.visibility = View.GONE
+                binding.savingsRecycler.visibility = View.VISIBLE
+                adapter.submitList(goals)
+            }
         }
     }
 
     private fun showAddGoalDialog() {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_savings_goal, null)
-        val nameEdit = dialogView.findViewById<EditText>(R.id.goal_name_edit)
-        val targetEdit = dialogView.findViewById<EditText>(R.id.goal_target_edit)
-        val deadlineEdit = dialogView.findViewById<EditText>(R.id.goal_deadline_edit)
+        val dialogBinding = DialogAddSavingsGoalBinding.inflate(layoutInflater)
+        
+        val builder = AlertDialog.Builder(requireContext(), R.style.Theme_CoinCompass)
+        builder.setView(dialogBinding.root)
+        val dialog = builder.create()
+        dialog.show()
 
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("New Savings Goal")
-        builder.setView(dialogView)
-        builder.setPositiveButton("Add") { _, _ ->
-            val name = nameEdit.text.toString()
-            val target = targetEdit.text.toString().toDoubleOrNull() ?: 0.0
-            val deadline = deadlineEdit.text.toString()
+        dialogBinding.saveGoalButton.text = "Add Goal"
+        dialogBinding.saveGoalButton.setOnClickListener {
+            val name = dialogBinding.goalNameEdit.text.toString().trim()
+            val target = dialogBinding.goalTargetEdit.text.toString().toDoubleOrNull() ?: 0.0
+            val deadline = dialogBinding.goalDeadlineEdit.text.toString().trim()
             
             if (name.isNotEmpty() && target > 0) {
                 lifecycleScope.launch {
                     db.savingsGoalDao().insert(SavingsGoal(name = name, targetAmount = target, deadline = deadline))
+                    dialog.dismiss()
                 }
             } else {
-                Toast.makeText(requireContext(), "Please fill details", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Please fill in all details", Toast.LENGTH_SHORT).show()
             }
         }
-        builder.setNegativeButton("Cancel", null)
-        builder.show()
     }
 
     override fun onDestroyView() {
@@ -101,22 +110,25 @@ class SavingsFragment : Fragment() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = list[position]
             holder.binding.goalName.text = item.name
-            holder.binding.goalDeadline.text = "Target: ${item.deadline}"
-            holder.binding.savedAmount.text = "R${"%.2f".format(item.currentAmount)}"
-            holder.binding.targetAmount.text = "of R${"%.2f".format(item.targetAmount)}"
+            holder.binding.goalDeadline.text = "Due: ${item.deadline}"
+            holder.binding.savedAmount.text = "R${"%.0f".format(item.currentAmount)}"
+            holder.binding.targetAmount.text = "R${"%.0f".format(item.targetAmount)}"
             
             val progress = if (item.targetAmount > 0) (item.currentAmount / item.targetAmount * 100).toInt() else 0
-            holder.binding.goalProgress.progress = progress
+            holder.binding.goalProgress.progress = progress.coerceAtMost(100)
+            holder.binding.percentComplete.text = "$progress%"
 
-            // Achievement indicator
-            if (progress >= 90) {
-                holder.binding.achievementBadge.visibility = View.VISIBLE
-                holder.binding.goalStatusIndicator.visibility = View.VISIBLE
-                holder.binding.goalStatusIndicator.text = if (progress >= 100) "Goal Achieved!" else "Almost there!"
-                holder.binding.goalStatusIndicator.setTextColor(resources.getColor(R.color.mid_green, null))
+            // Completed vs In-Progress Styling
+            if (progress >= 100) {
+                holder.binding.goalProgress.setIndicatorColor(resources.getColor(R.color.secondary_gold, null))
+                holder.binding.percentComplete.setTextColor(resources.getColor(R.color.secondary_gold, null))
+                holder.binding.goalIconContainer.setCardBackgroundColor(resources.getColor(R.color.cream_surface, null))
+                holder.binding.goalIcon.setColorFilter(resources.getColor(R.color.secondary_gold, null))
             } else {
-                holder.binding.achievementBadge.visibility = View.GONE
-                holder.binding.goalStatusIndicator.visibility = View.GONE
+                holder.binding.goalProgress.setIndicatorColor(resources.getColor(R.color.primary_green, null))
+                holder.binding.percentComplete.setTextColor(resources.getColor(R.color.primary_green, null))
+                holder.binding.goalIconContainer.setCardBackgroundColor(resources.getColor(R.color.light_green, null))
+                holder.binding.goalIcon.setColorFilter(resources.getColor(R.color.primary_green, null))
             }
 
             holder.binding.btnDelete.setOnClickListener {
@@ -135,45 +147,41 @@ class SavingsFragment : Fragment() {
         }
 
         private fun showEditGoalDialog(goal: SavingsGoal) {
-            val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_savings_goal, null)
-            val nameEdit = dialogView.findViewById<EditText>(R.id.goal_name_edit)
-            val targetEdit = dialogView.findViewById<EditText>(R.id.goal_target_edit)
-            val deadlineEdit = dialogView.findViewById<EditText>(R.id.goal_deadline_edit)
+            val dialogBinding = DialogAddSavingsGoalBinding.inflate(layoutInflater)
+            
+            dialogBinding.goalNameEdit.setText(goal.name)
+            dialogBinding.goalTargetEdit.setText(goal.targetAmount.toString())
+            dialogBinding.goalDeadlineEdit.setText(goal.deadline)
+            dialogBinding.saveGoalButton.text = "Update Goal"
 
-            nameEdit.setText(goal.name)
-            targetEdit.setText(goal.targetAmount.toString())
-            deadlineEdit.setText(goal.deadline)
+            val builder = AlertDialog.Builder(requireContext(), R.style.Theme_CoinCompass)
+            builder.setView(dialogBinding.root)
+            val dialog = builder.create()
+            dialog.show()
 
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("Edit Savings Goal")
-            builder.setView(dialogView)
-            builder.setPositiveButton("Save") { _, _ ->
-                val name = nameEdit.text.toString()
-                val target = targetEdit.text.toString().toDoubleOrNull() ?: 0.0
-                val deadline = deadlineEdit.text.toString()
+            dialogBinding.saveGoalButton.setOnClickListener {
+                val name = dialogBinding.goalNameEdit.text.toString().trim()
+                val target = dialogBinding.goalTargetEdit.text.toString().toDoubleOrNull() ?: 0.0
+                val deadline = dialogBinding.goalDeadlineEdit.text.toString().trim()
                 
                 if (name.isNotEmpty() && target > 0) {
                     lifecycleScope.launch {
                         db.savingsGoalDao().update(goal.copy(name = name, targetAmount = target, deadline = deadline))
+                        dialog.dismiss()
                     }
                 }
             }
-            builder.setNegativeButton("Cancel", null)
-            builder.show()
         }
 
         private fun showAddFundsDialog(goal: SavingsGoal) {
-            val input = EditText(requireContext())
-            input.hint = "Amount to add (R)"
-            input.inputType = android.text.InputType.TYPE_CLASS_NUMBER or android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
-            input.setTextColor(resources.getColor(R.color.black, null))
-            input.setPadding(48, 32, 48, 32)
-
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("Add Funds to ${goal.name}")
-            builder.setView(input)
-            builder.setPositiveButton("Add") { _, _ ->
-                val amount = input.text.toString().toDoubleOrNull() ?: 0.0
+            val dialogBinding = DialogAddFundsBinding.inflate(layoutInflater)
+            
+            val builder = AlertDialog.Builder(requireContext(), R.style.Theme_CoinCompass)
+            builder.setView(dialogBinding.root)
+            
+            // Add a "Confirm" button manually to the dialog
+            builder.setPositiveButton("Add Funds") { _, _ ->
+                val amount = dialogBinding.addFundsEdit.text.toString().toDoubleOrNull() ?: 0.0
                 if (amount > 0) {
                     lifecycleScope.launch {
                         val updated = goal.copy(currentAmount = goal.currentAmount + amount)

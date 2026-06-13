@@ -1,23 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Basic colors -->
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Core Brand Palette -->
+    <color name="primary_green">#2E7D32</color>
+    <color name="secondary_green">#2E8B57</color>
+    <color name="soft_mint">#DFF5E1</color>
+    <color name="gold_accent">#F9A825</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="dark_text">#1F2937</color>
 
-    <!-- App Theme Colors (based on the screenshots) -->
-    <color name="dark_green">#1B4332</color>
-    <color name="mid_green">#2D6A4F</color>
-    <color name="light_green">#D8E2DC</color>
-    <color name="gold">#E9C46A</color>
-    <color name="soft_gold">#FFD460</color>
-    <color name="cream_input">#FEFAE0</color>
-    <color name="light_grey">#F5F5F5</color>
-    <color name="text_grey">#6C757D</color>
-    <color name="delete_red">#BA181B</color>
+    <!-- Semantic Mappings -->
+    <color name="income_green">#2E7D32</color>
+    <color name="expense_red">#E57373</color>
+    <color name="delete_red">#D32F2F</color>
+    <color name="text_charcoal">#1F2937</color>
+    <color name="text_grey">#6B7280</color>
+    <color name="light_grey">#F8F9FA</color>
 
-    <!-- Old colors for backward compatibility if needed -->
-    <color name="primary">#1B4332</color>
-    <color name="primary_dark">#081C15</color>
-    <color name="accent">#E9C46A</color>
-    <color name="background">#F5F5F5</color>
+    <!-- Backgrounds -->
+    <color name="background_off_white">#FFFFFF</color>
+    <color name="background_color">#FFFFFF</color>
+    <color name="cream_surface">#FFFFFF</color>
+
+    <!-- Compatibility/Legacy Support (aliased to brand palette) -->
+    <color name="gold">#F9A825</color>
+    <color name="secondary_gold">#F9A825</color>
+    <color name="soft_gold">#F9A825</color>
+    <color name="emerald_green">#2E7D32</color>
+    <color name="dark_green">#2E7D32</color>
+    <color name="mid_green">#2E8B57</color>
+    <color name="light_green">#DFF5E1</color>
+    <color name="primary">#2E7D32</color>
+    <color name="primary_dark">#2E7D32</color>
+    <color name="accent">#F9A825</color>
+
+    <!-- Category Specific Colors -->
+    <color name="cat_health">#0D9488</color>    <!-- Teal -->
+    <color name="cat_food">#F87171</color>      <!-- Coral -->
+    <color name="cat_transport">#FBBF24</color> <!-- Amber -->
+    <color name="cat_education">#3B82F6</color> <!-- Blue -->
+    <color name="cat_entertainment">#8B5CF6</color> <!-- Purple -->
+    <color name="text_secondary">#6B7280</color>
+    <color name="cream_input">#FFFFFF</color>
 </resources>

@@ -54,44 +54,38 @@
                 app:layout_constraintTop_toBottomOf="@id/welcome_text" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/email_layout"
-                style="@style/Widget.Material3.TextInputLayout.FilledBox"
+                android:id="@+id/username_layout"
+                style="@style/FintechInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:hint="Email"
-                app:boxBackgroundColor="@color/cream_input"
-                app:hintTextColor="@color/mid_green"
+                android:hint="Username"
                 app:layout_constraintTop_toBottomOf="@id/subtitle"
-                app:startIconDrawable="@android:drawable/ic_dialog_email">
+                app:startIconDrawable="@android:drawable/ic_menu_myplaces">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/email_edit"
+                    android:id="@+id/username_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:textColor="@color/black" />
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/password_layout"
-                style="@style/Widget.Material3.TextInputLayout.FilledBox"
+                style="@style/FintechInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:hint="Password"
-                app:boxBackgroundColor="@color/cream_input"
                 app:endIconMode="password_toggle"
-                app:hintTextColor="@color/mid_green"
-                app:layout_constraintTop_toBottomOf="@id/email_layout"
+                app:layout_constraintTop_toBottomOf="@id/username_layout"
                 app:startIconDrawable="@android:drawable/ic_lock_idle_lock">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/password_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:textColor="@color/black" />
+                    android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.checkbox.MaterialCheckBox

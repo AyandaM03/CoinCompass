@@ -7,18 +7,6 @@
     android:background="@drawable/splash_gradient"
     tools:context=".ui.SplashActivity">
 
-    <!-- Decorative Top Circle -->
-    <View
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="-150dp"
-        android:layout_marginEnd="-150dp"
-        android:background="@drawable/ic_home"
-        android:alpha="0.1"
-        android:rotation="45"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
         android:id="@+id/logo_container"
         android:layout_width="wrap_content"
@@ -65,9 +53,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="Navigate Your Finances"
-            android:textColor="@color/light_green"
-            android:textSize="16sp"
-            android:alpha="0.8"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:alpha="0.7"
             android:letterSpacing="0.1"
             android:textAllCaps="true" />
 
@@ -80,21 +68,9 @@
         android:layout_marginBottom="64dp"
         android:indeterminate="true"
         app:indicatorColor="@color/gold"
-        app:trackColor="@color/dark_green"
+        app:trackColor="#20FFFFFF"
         app:trackCornerRadius="4dp"
         app:trackThickness="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:text="Premium Budgeting"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        android:alpha="0.5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

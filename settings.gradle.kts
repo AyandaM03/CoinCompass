@@ -23,5 +23,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "CoinCompass"
+rootProject.name = "CoinCompass-main"
 include(":app")

@@ -43,12 +43,11 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/name_layout"
-                style="@style/Widget.Material3.TextInputLayout.FilledBox"
+                style="@style/FintechInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:hint="Full Name"
-                app:boxBackgroundColor="@color/cream_input"
                 app:layout_constraintTop_toBottomOf="@id/title"
                 app:startIconDrawable="@android:drawable/ic_menu_edit">
 
@@ -56,18 +55,16 @@
                     android:id="@+id/name_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:textColor="@color/black" />
+                    android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/username_layout"
-                style="@style/Widget.Material3.TextInputLayout.FilledBox"
+                style="@style/FintechInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:hint="Username"
-                app:boxBackgroundColor="@color/cream_input"
                 app:layout_constraintTop_toBottomOf="@id/name_layout"
                 app:startIconDrawable="@android:drawable/ic_menu_myplaces">
 
@@ -75,18 +72,16 @@
                     android:id="@+id/username_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:textColor="@color/black" />
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/email_layout"
-                style="@style/Widget.Material3.TextInputLayout.FilledBox"
+                style="@style/FintechInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:hint="Email"
-                app:boxBackgroundColor="@color/cream_input"
                 app:layout_constraintTop_toBottomOf="@id/username_layout"
                 app:startIconDrawable="@android:drawable/ic_dialog_email">
 
@@ -94,18 +89,16 @@
                     android:id="@+id/email_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:textColor="@color/black" />
+                    android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/password_layout"
-                style="@style/Widget.Material3.TextInputLayout.FilledBox"
+                style="@style/FintechInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:hint="Password"
-                app:boxBackgroundColor="@color/cream_input"
                 app:endIconMode="password_toggle"
                 app:layout_constraintTop_toBottomOf="@id/email_layout"
                 app:startIconDrawable="@android:drawable/ic_lock_idle_lock">
@@ -114,18 +107,16 @@
                     android:id="@+id/password_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:textColor="@color/black" />
+                    android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/confirm_password_layout"
-                style="@style/Widget.Material3.TextInputLayout.FilledBox"
+                style="@style/FintechInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:hint="Confirm Password"
-                app:boxBackgroundColor="@color/cream_input"
                 app:endIconMode="password_toggle"
                 app:layout_constraintTop_toBottomOf="@id/password_layout"
                 app:startIconDrawable="@android:drawable/ic_lock_idle_lock">
@@ -134,8 +125,7 @@
                     android:id="@+id/confirm_password_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:textColor="@color/black" />
+                    android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.checkbox.MaterialCheckBox

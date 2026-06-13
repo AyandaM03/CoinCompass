@@ -1,197 +1,340 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:fillViewport="true">
+    android:background="@color/white">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="24dp">
+        android:background="@color/white"
+        app:elevation="0dp">
 
-        <!-- Header: Title and Close Button -->
-        <TextView
-            android:id="@+id/header_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Transaction"
-            android:textColor="@color/dark_green"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/btn_close"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_close_clear_cancel"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/text_grey" />
-
-        <!-- Form Fields -->
-        <LinearLayout
-            android:id="@+id/form_container"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="56dp"
+            android:paddingBottom="16dp">
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_revert"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/primary_green" />
+
+            <TextView
+                android:id="@+id/header_title"
+                style="@style/FintechHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="Add Transaction"
+                android:textColor="@color/primary_green"
+                app:layout_constraintBottom_toBottomOf="@id/btn_back"
+                app:layout_constraintStart_toEndOf="@id/btn_back"
+                app:layout_constraintTop_toTopOf="@id/btn_back" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/header_title">
+            android:padding="20dp">
 
-            <!-- Type Selector -->
-            <com.google.android.material.button.MaterialButtonToggleGroup
-                android:id="@+id/type_toggle_group"
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Material3.CardView.Elevated"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:singleSelection="true"
-                app:selectionRequired="true"
-                app:checkedButton="@+id/btn_type_expense">
-                <Button
-                    android:id="@+id/btn_type_expense"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
+                app:cardBackgroundColor="@color/soft_mint"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Expense" />
-                <Button
-                    android:id="@+id/btn_type_income"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Income" />
-            </com.google.android.material.button.MaterialButtonToggleGroup>
+                    android:orientation="vertical"
+                    android:padding="24dp">
 
-            <!-- Category Dropdown -->
-            <Spinner
-                android:id="@+id/category_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginBottom="16dp"
-                android:background="@android:drawable/edit_text"
-                android:padding="8dp" />
+                    <!-- Transaction Type Toggle -->
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/type_toggle_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"
+                        app:checkedButton="@+id/btn_type_expense"
+                        app:selectionRequired="true"
+                        app:singleSelection="true">
 
-            <!-- Description -->
-            <EditText
-                android:id="@+id/description_edit"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginBottom="16dp"
-                android:background="@android:drawable/edit_text"
-                android:hint="Description"
-                android:textColor="@color/black"
-                android:textColorHint="@color/text_grey"
-                android:padding="16dp" />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_type_expense"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Expense"
+                            android:textColor="@color/segmented_text_color"
+                            app:backgroundTint="@drawable/segmented_button_bg"
+                            app:shapeAppearanceOverlay="@null"
+                            app:strokeWidth="0dp" />
 
-            <!-- Amount (R) -->
-            <EditText
-                android:id="@+id/amount_edit"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginBottom="16dp"
-                android:background="@android:drawable/edit_text"
-                android:drawableStart="@android:drawable/ic_menu_edit"
-                android:drawablePadding="12dp"
-                android:hint="Amount (R)"
-                android:inputType="numberDecimal"
-                android:textColor="@color/black"
-                android:textColorHint="@color/text_grey"
-                android:padding="16dp" />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_type_income"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Income"
+                            android:textColor="@color/segmented_text_color"
+                            app:backgroundTint="@drawable/segmented_button_bg"
+                            app:shapeAppearanceOverlay="@null"
+                            app:strokeWidth="0dp" />
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
 
-            <!-- Date -->
-            <EditText
-                android:id="@+id/date_edit"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginBottom="16dp"
-                android:background="@android:drawable/edit_text"
-                android:drawableEnd="@drawable/ic_goals"
-                android:hint="Date"
-                android:inputType="none"
-                android:focusable="false"
-                android:clickable="true"
-                android:textColor="@color/black"
-                android:textColorHint="@color/text_grey"
-                android:padding="16dp" />
+                    <!-- Amount Field -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/FintechInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:hint="Amount (ZAR)"
+                        app:prefixText="R ">
 
-            <!-- Times row -->
-            <LinearLayout
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/amount_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Category Dropdown -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:hint="Category"
+                        app:startIconDrawable="@drawable/ic_categories"
+                        app:startIconTint="@color/primary_green">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/category_spinner_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Date Picker -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/FintechInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:hint="Date"
+                        app:startIconDrawable="@drawable/ic_calendar"
+                        app:startIconTint="@color/primary_green">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/date_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="false"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Description/Notes -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/FintechInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:hint="Notes">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/notes_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="top"
+                            android:inputType="textMultiLine"
+                            android:minLines="3"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Location Field -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/FintechInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:hint="Location (Optional)"
+                        app:startIconDrawable="@android:drawable/ic_menu_mylocation"
+                        app:startIconTint="@color/primary_green">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/location_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textCapWords"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Image Attachment Section -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="Receipt / Image"
+                        android:textColor="@color/text_grey"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_camera"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:text="Camera"
+                            app:icon="@android:drawable/ic_menu_camera" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_gallery"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:text="Gallery"
+                            app:icon="@android:drawable/ic_menu_gallery" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/receipt_preview"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginBottom="16dp"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Transaction Preview Card -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="Transaction Preview Card"
+                style="@style/FintechHeader"
+                android:textSize="18sp"
+                android:textColor="@color/primary_green" />
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:orientation="horizontal">
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="0dp">
 
-                <EditText
-                    android:id="@+id/start_time_edit"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="1"
-                    android:background="@android:drawable/edit_text"
-                    android:hint="Start Time"
-                    android:inputType="none"
-                    android:focusable="false"
-                    android:clickable="true"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/text_grey"
-                    android:padding="16dp" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp">
 
-                <EditText
-                    android:id="@+id/end_time_edit"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:background="@android:drawable/edit_text"
-                    android:hint="End Time"
-                    android:inputType="none"
-                    android:focusable="false"
-                    android:clickable="true"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/text_grey"
-                    android:padding="16dp" />
-            </LinearLayout>
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/preview_icon_container"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:cardBackgroundColor="@color/soft_mint"
+                        app:cardCornerRadius="24dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
 
-            <!-- Attach Receipt -->
+                        <ImageView
+                            android:id="@+id/preview_category_icon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_categories"
+                            app:tint="@color/primary_green" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:id="@+id/preview_category_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="Select Category"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@id/preview_icon_container"
+                        app:layout_constraintTop_toTopOf="@id/preview_icon_container" />
+
+                    <TextView
+                        android:id="@+id/preview_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Today"
+                        android:textColor="@color/text_grey"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="@id/preview_category_name"
+                        app:layout_constraintTop_toBottomOf="@id/preview_category_name" />
+
+                    <TextView
+                        android:id="@+id/preview_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="R 0.00"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_attach_receipt"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:layout_marginBottom="16dp"
-                android:backgroundTint="#F8F9FA"
-                android:text="Attach Receipt Photo"
-                android:textColor="@color/gold"
-                app:cornerRadius="12dp" />
-
-            <!-- Preview of selected image -->
-            <ImageView
-                android:id="@+id/receipt_preview"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginBottom="32dp"
-                android:scaleType="centerCrop"
-                android:visibility="gone" />
-
-            <!-- Save Button -->
-            <Button
                 android:id="@+id/save_expense_button"
+                style="@style/FintechButton"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginBottom="24dp"
-                android:backgroundTint="@color/dark_green"
+                android:layout_height="60dp"
+                android:layout_marginTop="40dp"
                 android:text="Save Transaction"
-                android:textAllCaps="false"
-                android:textColor="@color/gold"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:cornerRadius="16dp" />
 
         </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

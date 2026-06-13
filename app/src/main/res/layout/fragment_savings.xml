@@ -4,36 +4,239 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_grey">
+    android:background="@color/background_off_white">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:elevation="2dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="56dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Financial Goals"
+                style="@style/FintechHeader"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="80dp">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingHorizontal="20dp"
-            android:paddingTop="56dp"
-            android:paddingBottom="20dp">
+            android:paddingTop="20dp"
+            android:paddingBottom="80dp">
+
+            <!-- Goal Range Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/goal_range_card"
+                style="@style/FintechCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Current Savings Strategy"
+                        style="@style/FintechSubHeader"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary_green" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Minimum Goal"
+                                android:textColor="@color/cat_transport"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/min_goal_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="R5,000.00"
+                                android:textColor="@color/text_charcoal"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/light_grey"
+                            android:layout_marginHorizontal="16dp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Maximum Goal"
+                                android:textColor="@color/primary_green"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/max_goal_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="R15,000.00"
+                                android:textColor="@color/text_charcoal"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Performance Section with Gauge Chart Placeholder -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/performance_card"
+                style="@style/FintechCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Performance Overview"
+                        style="@style/FintechSubHeader"
+                        android:layout_gravity="start"
+                        android:textStyle="bold" />
+
+                    <!-- Placeholder for semi-circular gauge chart -->
+                    <RelativeLayout
+                        android:layout_width="200dp"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="16dp">
+
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/performance_gauge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:progress="75"
+                            app:indicatorSize="200dp"
+                            app:trackThickness="20dp"
+                            app:indicatorColor="@color/primary_green"
+                            app:trackColor="@color/light_grey"
+                            app:trackCornerRadius="10dp"
+                            android:rotation="270" />
+
+                        <TextView
+                            android:id="@+id/performance_status_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="20dp"
+                            android:text="WITHIN GOAL"
+                            android:textColor="@color/primary_green"
+                            android:textStyle="bold"
+                            android:textSize="14sp" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Under"
+                            android:textSize="11sp"
+                            android:textColor="@color/cat_transport"
+                            android:drawablePadding="4dp"
+                            app:drawableStartCompat="@android:drawable/presence_away"
+                            app:drawableTint="@color/cat_transport" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="Within"
+                            android:textSize="11sp"
+                            android:textColor="@color/primary_green"
+                            android:drawablePadding="4dp"
+                            app:drawableStartCompat="@android:drawable/presence_online"
+                            app:drawableTint="@color/primary_green" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="Over"
+                            android:textSize="11sp"
+                            android:textColor="@color/expense_red"
+                            android:drawablePadding="4dp"
+                            app:drawableStartCompat="@android:drawable/presence_busy"
+                            app:drawableTint="@color/expense_red" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Savings Goals"
-                android:textColor="@color/dark_green"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:text="Active Goals"
+                style="@style/FintechHeader"
+                android:textSize="18sp"
+                android:layout_marginBottom="12dp" />
+
+            <include
+                android:id="@+id/empty_state"
+                layout="@layout/layout_empty_state" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/savings_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:nestedScrollingEnabled="false"
                 tools:listitem="@layout/item_savings_goal" />
 
         </LinearLayout>
@@ -46,9 +249,9 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:text="New Goal"
-        android:textColor="@color/black"
-        app:backgroundTint="@color/gold"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/primary_green"
         app:icon="@drawable/ic_add"
-        app:iconTint="@color/black" />
+        app:iconTint="@color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

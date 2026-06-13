@@ -32,14 +32,14 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.signinButton.setOnClickListener {
-            val emailOrUsername = binding.emailEdit.text.toString().trim()
+            val username = binding.usernameEdit.text.toString().trim()
             val password = binding.passwordEdit.text.toString()
 
-            if (emailOrUsername.isEmpty()) {
-                binding.emailLayout.error = "Please enter email or username"
+            if (username.isEmpty()) {
+                binding.usernameLayout.error = "Please enter username"
                 return@setOnClickListener
             } else {
-                binding.emailLayout.error = null
+                binding.usernameLayout.error = null
             }
 
             if (password.isEmpty()) {
@@ -50,10 +50,10 @@ class LoginActivity : AppCompatActivity() {
             }
 
             lifecycleScope.launch {
-                // Try finding by email first, then username
-                var user = db.userDao().getUserByEmail(emailOrUsername)
+                // Try finding by username first, then email
+                var user = db.userDao().getUserByUsername(username)
                 if (user == null) {
-                    user = db.userDao().getUserByUsername(emailOrUsername)
+                    user = db.userDao().getUserByEmail(username)
                 }
 
                 if (user != null && SecurityUtils.verifyPassword(password, user.password)) {
