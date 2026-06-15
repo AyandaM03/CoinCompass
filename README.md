@@ -133,7 +133,7 @@ The old expense history screen was replaced with a modern transactions hub.
 </table>
 ---
 
-**New Features:**
+**Features:**
 
 * All Transactions tab
 * Income tab
@@ -329,6 +329,32 @@ Transactions Hub
 </table>
 
 ---
+
+## ✨  New Features We Added
+
+To make budgeting smarter, we built 4 new features for Spending Journal:
+
+### 1. Transaction Calendar  
+**See spending by date**  
+Your financial timeline. Pick any date on the calendar to view transactions for that day. Filter by **Selected Day, This Week, This Month, Custom Range**.
+
+<img width="300" alt="WhatsApp Image 2026-06-15 at 13 00 14 (4)" src="https://github.com/user-attachments/assets/8dbcf555-c178-4d2e-bc23-bbfea6e7edf3" />
+
+
+### 2.  Financial Health Score  
+**Know how healthy your money habits are**  
+Get a score based on your goals + tracking consistency. Shows status like "Good" or "Needs Improvement" so you know what to work on.
+
+### 3. Monthly Summary  
+**Big picture in one card**  
+Quick view of **Total Income, Total Expenses, Total Saved, Remaining Budget** for the month. Helps you see where money went without digging.
+
+### 4.  Smart Financial Tips  
+**Personalized advice, not generic tips**  
+The app gives tips based on your actual data. Example: "Track your first expense to unlock tips" or "Add monthly income to see savings potential".
+
+<img width="300" alt="WhatsApp Image 2026-06-15 at 18 05 02" src="https://github.com/user-attachments/assets/a2929e58-8754-47b3-aeee-3315d3dc75af" />
+
 
 ##  Project Outcome
 
