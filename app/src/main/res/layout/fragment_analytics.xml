@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- This is my Analytics screen! I'm using CoordinatorLayout again because it's super flexible. -->
+<!-- Layout for financial analysis visualizations using CoordinatorLayout for scroll interaction management -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/background_off_white">
 
-    <!-- The top header section. I used AppBarLayout to keep it clean. -->
+    <!-- Non-collapsible header section containing the fragment title -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Everything below the header scrolls. -->
+    <!-- Scrollable content area containing charts and summarized data insights -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -56,7 +56,7 @@
             android:paddingTop="24dp"
             android:paddingBottom="100dp">
 
-            <!-- Filter Chips! I used a HorizontalScrollView so they can slide left and right. -->
+            <!-- Selection chips for temporal data filtering -->
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp">
 
-                <!-- This card holds the bar chart. MPAndroidChart is amazing! -->
+                <!-- Container for categorical spending bar chart -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/chart_card"
                     style="@style/Widget.Material3.CardView.Elevated"
@@ -130,7 +130,7 @@
                             android:textStyle="bold"
                             android:textSize="20sp" />
 
-                        <!-- The actual chart. I had to add a library for this. -->
+                        <!-- Bar chart view provided by MPAndroidChart library -->
                         <com.github.mikephil.charting.charts.BarChart
                             android:id="@+id/category_bar_chart"
                             android:layout_width="match_parent"
@@ -151,7 +151,7 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- I added a ProgressBar to show while the data is loading. -->
+                <!-- UI indicators for asynchronous data loading states -->
                 <ProgressBar
                     android:id="@+id/loading_indicator"
                     android:layout_width="wrap_content"
@@ -160,7 +160,7 @@
                     android:visibility="gone"
                     android:indeterminateTint="@color/primary_green" />
 
-                <!-- If there's no data, I show this empty state instead of a blank screen. -->
+                <!-- Layout shown when no transaction data matches the selected filter criteria -->
                 <LinearLayout
                     android:id="@+id/empty_state_layout"
                     android:layout_width="match_parent"
@@ -187,7 +187,7 @@
 
             </FrameLayout>
 
-            <!-- A small summary card at the bottom. -->
+            <!-- Card presenting high-level summarized insights for the filtered period -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/insights_card"
                 style="@style/Widget.Material3.CardView.Elevated"
@@ -220,7 +220,7 @@
                         android:layout_marginTop="20dp"
                         android:baselineAligned="false">
 
-                        <!-- Top category of the month. -->
+                        <!-- Information regarding the highest spending category -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -258,7 +258,7 @@
                                 android:gravity="center" />
                         </LinearLayout>
 
-                        <!-- Total spent in the selected period. -->
+                        <!-- Information regarding the total aggregate amount for the period -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"

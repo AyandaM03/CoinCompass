@@ -31,20 +31,23 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-// This fragment shows all the user's transactions. I put a lot of work into the filtering!
+/**
+ * Fragment responsible for displaying a filterable list of all financial transactions.
+ * Includes search functionality, categorical filtering, and date range selection.
+ */
 class TransactionsFragment : Fragment() {
 
-    // Fragments use this special binding pattern to avoid memory leaks.
+    // ViewBinding instance using the recommended nullable pattern for Fragments
     private var _binding: FragmentTransactionsBinding? = null
     private val binding get() = _binding!!
     private lateinit var db: AppDatabase
     private lateinit var adapter: TransactionAdapter
     
-    // Lists to hold our data.
+    // Data structures for holding source transactions and available categories
     private var allTransactions: List<Expense> = emptyList()
     private var categories: List<Category> = emptyList()
     
-    // Keeping track of what filters are active.
+    // State variables for maintaining active filter criteria
     private var currentTypeFilter = "All"
     private var currentDateFilter = "All"
     private var customStartDate = ""
@@ -60,30 +63,29 @@ class TransactionsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         try {
             db = AppDatabase.getDatabase(requireContext())
-            setupRecyclerView() // Set up the list.
-            setupListeners()    // Set up button clicks and search.
-            observeData()       // Listen for database changes.
-            setupSwipeActions() // Swiping is a cool modern feature!
+            setupRecyclerView()
+            setupListeners()
+            observeData()
+            setupSwipeActions()
         } catch (e: Exception) {
             Log.e("TransactionsFragment", "Error in onViewCreated", e)
         }
     }
 
-    // Setting up the RecyclerView with my custom adapter.
+    // Configures the RecyclerView with a LinearLayoutManager and the custom adapter
     private fun setupRecyclerView() {
         adapter = TransactionAdapter()
         binding.transactionsRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.transactionsRecycler.adapter = adapter
     }
 
-    // Wiring up all the interactive parts.
+    // Initialization of event listeners for interactive components (FAB, search bar, chip groups)
     private fun setupListeners() {
-        // Floating Action Button to add a new expense.
         binding.fabAddTransaction.setOnClickListener {
             startActivity(Intent(requireContext(), AddExpenseActivity::class.java))
         }
 
-        // Live search! It filters as you type.
+        // Real-time search filter update based on user input
         binding.searchEdit.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -93,7 +95,7 @@ class TransactionsFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        // Filter by Income or Expense.
+        // Filter transactions by type (Income vs Expense)
         binding.typeChipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
             currentTypeFilter = when (checkedIds.firstOrNull()) {
                 R.id.chip_income -> "Income"
@@ -103,7 +105,7 @@ class TransactionsFragment : Fragment() {
             applyFilters()
         }
 
-        // Filter by date (Today, Month, or a custom range).
+        // Filter transactions by predefined or custom date ranges
         binding.dateChipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
             when (checkedIds.firstOrNull()) {
                 R.id.chip_today -> {
@@ -115,7 +117,7 @@ class TransactionsFragment : Fragment() {
                     applyFilters()
                 }
                 R.id.chip_range -> {
-                    showRangePicker() // Opens a fancy date range picker.
+                    showRangePicker()
                 }
                 else -> {
                     currentDateFilter = "All"
@@ -125,7 +127,7 @@ class TransactionsFragment : Fragment() {
         }
     }
 
-    // This MaterialDatePicker is really slick!
+    // Displays the Material Design date range picker for custom temporal filtering
     private fun showRangePicker() {
         try {
             val picker = MaterialDatePicker.Builder.dateRangePicker()
@@ -146,7 +148,7 @@ class TransactionsFragment : Fragment() {
         }
     }
 
-    // Observing the database so the UI updates automatically.
+    // Establishes LiveData observers for categories and expenses to enable reactive UI updates
     private fun observeData() {
         db.categoryDao().getAllCategories().observe(viewLifecycleOwner) { 
             categories = it ?: emptyList()
@@ -161,18 +163,18 @@ class TransactionsFragment : Fragment() {
         }
     }
 
-    // This is the core logic that decides which transactions to show.
+    // Consolidates active filter states and search queries to produce the final displayed transaction list
     private fun applyFilters() {
         if (_binding == null) return
         
         var filtered = allTransactions
 
-        // 1. Filter by Type (Income/Expense/All)
+        // Category/Type filter application
         if (currentTypeFilter != "All") {
             filtered = filtered.filter { it.type == currentTypeFilter }
         }
 
-        // 2. Filter by Date
+        // Date range filter application
         val cal = Calendar.getInstance()
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         when (currentDateFilter) {
@@ -189,7 +191,7 @@ class TransactionsFragment : Fragment() {
             }
         }
 
-        // 3. Filter by Search Query (Description or Category)
+        // Text search filter application (checks description and category name)
         if (currentSearch.isNotEmpty()) {
             filtered = filtered.filter { 
                 it.description.contains(currentSearch, ignoreCase = true) || 
@@ -197,12 +199,12 @@ class TransactionsFragment : Fragment() {
             }
         }
 
-        // Updating the list in the adapter.
+        // Sort by date descending and update the adapter
         if (::adapter.isInitialized) {
             adapter.submitList(filtered.sortedByDescending { it.date })
         }
         
-        // Show the 'empty state' message if nothing matches the filters.
+        // Handle visibility of the empty state UI component
         if (filtered.isEmpty()) {
             binding.emptyState.root.visibility = View.VISIBLE
             binding.transactionsRecycler.visibility = View.GONE
@@ -212,7 +214,7 @@ class TransactionsFragment : Fragment() {
         }
     }
 
-    // Swiping right opens the edit screen, swiping left deletes. Super convenient!
+    // Configures swipe-to-edit (right) and swipe-to-delete (left) gestures using ItemTouchHelper
     private fun setupSwipeActions() {
         val swipeHandler = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(r: RecyclerView, vh: RecyclerView.ViewHolder, t: RecyclerView.ViewHolder) = false
@@ -224,7 +226,7 @@ class TransactionsFragment : Fragment() {
                 val expense = adapter.getItemAt(position)
                 
                 if (direction == ItemTouchHelper.LEFT) {
-                    // Delete from database in a coroutine.
+                    // Execute deletion on a background thread
                     lifecycleScope.launch {
                         try {
                             db.expenseDao().delete(expense)
@@ -236,11 +238,11 @@ class TransactionsFragment : Fragment() {
                         }
                     }
                 } else {
-                    // Open the edit screen.
+                    // Launch modification activity
                     val intent = Intent(requireContext(), AddExpenseActivity::class.java)
                     intent.putExtra("expense_id", expense.id)
                     startActivity(intent)
-                    adapter.notifyItemChanged(position) // Reset the swipe.
+                    adapter.notifyItemChanged(position)
                 }
             }
         }
@@ -249,10 +251,12 @@ class TransactionsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // Cleaning up the binding.
+        _binding = null
     }
 
-    // The adapter handles how each item in the list is displayed.
+    /**
+     * Inner class adapter for managing the list of transaction items.
+     */
     inner class TransactionAdapter : RecyclerView.Adapter<TransactionAdapter.ViewHolder>() {
         private var list: List<Expense> = emptyList()
 
@@ -277,11 +281,11 @@ class TransactionsFragment : Fragment() {
                 holder.binding.expenseDesc.text = item.description
                 holder.binding.expenseDate.text = item.date
                 
-                // Finding the emoji for this category.
+                // Map category icons/emojis from the category reference list
                 val category = categories.find { it.name == item.categoryName }
                 holder.binding.categoryEmoji.text = category?.icon ?: "📁"
                 
-                // Different colors for Income vs Expense.
+                // Dynamically update colors and indicators based on transaction type (Income vs Expense)
                 if (item.type == "Income") {
                     holder.binding.expenseAmount.text = "+R${"%.2f".format(item.amount)}"
                     holder.binding.expenseAmount.setTextColor(ContextCompat.getColor(context, R.color.primary_green))
@@ -294,7 +298,7 @@ class TransactionsFragment : Fragment() {
                     holder.binding.iconContainer.setCardBackgroundColor(Color.WHITE)
                 }
 
-                // If there's a receipt photo, we show a little camera icon.
+                // Handle conditional visibility and loading of receipt images
                 if (!item.photoPath.isNullOrEmpty()) {
                     holder.binding.transactionImage.visibility = View.VISIBLE
                     if (item.photoPath == "camera_bitmap") {
@@ -302,7 +306,7 @@ class TransactionsFragment : Fragment() {
                     } else {
                         try {
                             val uri = Uri.parse(item.photoPath)
-                            // Making sure we still have permission to see the image.
+                            // Verify stream access to prevent runtime crashes during onBind
                             context.contentResolver.openInputStream(uri)?.use { 
                                 holder.binding.transactionImage.setImageURI(uri)
                             } ?: run {
@@ -317,7 +321,6 @@ class TransactionsFragment : Fragment() {
                     holder.binding.transactionImage.visibility = View.GONE
                 }
 
-                // Clicking an item opens the detail screen.
                 holder.itemView.setOnClickListener {
                     val intent = Intent(requireContext(), ExpenseDetailActivity::class.java)
                     intent.putExtra("expense_id", item.id)
@@ -330,7 +333,6 @@ class TransactionsFragment : Fragment() {
 
         override fun getItemCount() = list.size
 
-        // ViewHolder holds the view for each item.
         inner class ViewHolder(val binding: ItemExpenseBinding) : RecyclerView.ViewHolder(binding.root)
     }
 }

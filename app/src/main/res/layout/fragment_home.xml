@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Hey! This is my Home Fragment layout. I'm using CoordinatorLayout so I can do some fancy scrolling stuff later. -->
+<!-- Root layout using CoordinatorLayout to manage complex scrolling behaviors between the AppBar and NestedScrollView -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/background_off_white">
 
-    <!-- This is the top part of the screen that usually has the title or user info. -->
+    <!-- AppBarLayout to contain the collapsible header section -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         android:background="@color/white"
         app:elevation="0dp">
 
-        <!-- I used a CollapsingToolbarLayout here so the header can hide when the user scrolls down. -->
+        <!-- CollapsingToolbarLayout provides the parallax and exit-until-collapsed effects -->
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
@@ -24,7 +24,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
 
-            <!-- This is where the profile pic and 'Hello' message live. -->
+            <!-- Primary header content including user profile, greetings, and action buttons -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/header_content"
                 android:layout_width="match_parent"
@@ -34,7 +34,7 @@
                 android:paddingBottom="16dp"
                 app:layout_collapseMode="parallax">
 
-                <!-- My profile picture! I used ShapeableImageView to make it a circle. -->
+                <!-- Circular user profile image -->
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/user_avatar"
                     android:layout_width="44dp"
@@ -44,7 +44,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
-                <!-- Text for the greeting. I used a vertical LinearLayout to stack them. -->
+                <!-- User greeting and status text -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
                         android:fontFamily="sans-serif-medium" />
                 </LinearLayout>
 
-                <!-- A button for notifications. -->
+                <!-- Action button for notifications -->
                 <ImageButton
                     android:id="@+id/notification_badge"
                     android:layout_width="40dp"
@@ -89,7 +89,7 @@
                     app:layout_constraintEnd_toStartOf="@id/btn_logout"
                     android:layout_marginEnd="8dp" />
 
-                <!-- The logout button. It's red because it's a 'danger' action. -->
+                <!-- Session termination button -->
                 <ImageButton
                     android:id="@+id/btn_logout"
                     android:layout_width="40dp"
@@ -103,7 +103,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- This invisible toolbar is needed for the CollapsingToolbar to work properly. -->
+            <!-- Placeholder toolbar required for CollapsingToolbarLayout anchoring -->
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -114,7 +114,7 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- This is the main scrollable area where all the content goes. -->
+    <!-- Main scrollable container for dashboard content -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -128,7 +128,7 @@
             android:paddingHorizontal="20dp"
             android:paddingBottom="100dp">
 
-            <!-- This is the 'Premium' card that shows the total balance. I used a gradient to make it look cool. -->
+            <!-- Card displaying current total balance and summarized financial stats -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/balance_card"
                 android:layout_width="match_parent"
@@ -168,7 +168,7 @@
                         app:layout_constraintTop_toBottomOf="@id/balance_label"
                         app:layout_constraintStart_toStartOf="parent" />
 
-                    <!-- Mini stats area: Income, Expenses, and Savings rate. -->
+                    <!-- Grid-like section for Income, Expenses, and Savings Rate breakdown -->
                     <LinearLayout
                         android:id="@+id/mini_stats"
                         android:layout_width="match_parent"
@@ -244,7 +244,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- A card to show if the user is staying within their budget. -->
+            <!-- Visual representation of budget tracking status and current spending health -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/budget_health_card"
                 style="@style/FintechCard"
@@ -259,7 +259,7 @@
                     android:layout_height="wrap_content"
                     android:padding="24dp">
 
-                    <!-- Circular progress bar to show the health percentage. -->
+                    <!-- Circular indicator showing the percentage of budget utilized -->
                     <com.google.android.material.progressindicator.CircularProgressIndicator
                         android:id="@+id/health_progress"
                         android:layout_width="wrap_content"
@@ -328,7 +328,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- This card shows a 'score' based on the user's financial habits. -->
+            <!-- Overview of the user's financial behavior score -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/financial_health_score_card"
                 style="@style/FintechCard"
@@ -409,7 +409,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- A summary for the whole month. -->
+            <!-- Detailed monthly summary section with total income, expenses, and savings -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/monthly_summary_card"
                 style="@style/FintechCard"
@@ -436,7 +436,7 @@
                             android:textStyle="bold"
                             android:textColor="@color/primary_green" />
 
-                        <!-- A small badge to show the user's status. -->
+                        <!-- Status badge displaying overall financial performance evaluation -->
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -459,7 +459,7 @@
                         </com.google.android.material.card.MaterialCardView>
                     </RelativeLayout>
 
-                    <!-- I used a GridLayout here to show four stats in a 2x2 grid. -->
+                    <!-- Grid layout for structured presentation of primary financial metrics -->
                     <GridLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -467,7 +467,7 @@
                         android:columnCount="2"
                         android:rowCount="2">
 
-                        <!-- Total Income -->
+                        <!-- Metrics for total income recorded within the current period -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -494,7 +494,7 @@
                                 android:layout_marginTop="4dp" />
                         </LinearLayout>
 
-                        <!-- Total Expenses -->
+                        <!-- Metrics for total expenses incurred within the current period -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -521,7 +521,7 @@
                                 android:layout_marginTop="4dp" />
                         </LinearLayout>
 
-                        <!-- Total Saved -->
+                        <!-- Total accumulated savings for the current period -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -549,7 +549,7 @@
                                 android:layout_marginTop="4dp" />
                         </LinearLayout>
 
-                        <!-- Remaining Budget -->
+                        <!-- Remaining available budget based on allocated limits and current spending -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -582,7 +582,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- A row of quick action buttons for easy navigation. -->
+            <!-- Navigation quick actions row for frequently accessed features -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -626,7 +626,7 @@
                     android:layout_weight="1" />
             </LinearLayout>
 
-            <!-- A fun card for a 'Daily Coin Challenge'. I used a yellowish background. -->
+            <!-- Gamification component: Daily challenge for user engagement -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/challenge_card"
                 android:layout_width="match_parent"
@@ -676,6 +676,7 @@
                         </LinearLayout>
                     </LinearLayout>
 
+                    <!-- Statistics for the gamified rewards system -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -746,7 +747,7 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Button to start the challenge. -->
+                    <!-- Action to launch the rewards-based interaction -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_play_challenge"
                         android:layout_width="match_parent"
@@ -759,7 +760,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Smart Financial Tips Section. I used a custom style for the header. -->
+            <!-- Automated financial advice and insights based on user spending patterns -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -782,7 +783,7 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
-                    <!-- Tip 1: Savings rate advice. -->
+                    <!-- Tip regarding savings performance -->
                     <LinearLayout
                         android:id="@+id/tip_1_layout"
                         android:layout_width="match_parent"
@@ -813,7 +814,7 @@
                         android:background="#10000000"
                         android:layout_marginVertical="4dp" />
 
-                    <!-- Tip 2: Spending reduction advice. -->
+                    <!-- Tip regarding specific spending reduction goals -->
                     <LinearLayout
                         android:id="@+id/tip_2_layout"
                         android:layout_width="match_parent"
@@ -844,7 +845,7 @@
                         android:background="#10000000"
                         android:layout_marginVertical="4dp" />
 
-                    <!-- Tip 3: Budget tracking encouragement. -->
+                    <!-- General budget tracking encouragement -->
                     <LinearLayout
                         android:id="@+id/tip_3_layout"
                         android:layout_width="match_parent"
@@ -872,7 +873,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Spending Insights section. This gives the user details on where their money goes. -->
+            <!-- Detailed spending insights and categorical analysis section -->
             <TextView
                 android:id="@+id/insights_title"
                 android:layout_width="wrap_content"
@@ -896,7 +897,7 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <!-- Text shown if there isn't enough data yet. -->
+                    <!-- Fallback UI for insufficient transaction data -->
                     <TextView
                         android:id="@+id/insufficient_data_text"
                         android:layout_width="match_parent"
@@ -908,7 +909,7 @@
                         android:padding="20dp"
                         android:visibility="gone" />
 
-                    <!-- A grid for showing different insights. -->
+                    <!-- Grid layout for categorical and temporal spending insights -->
                     <GridLayout
                         android:id="@+id/insights_grid"
                         android:layout_width="match_parent"
@@ -917,7 +918,7 @@
                         android:alignmentMode="alignMargins"
                         android:columnOrderPreserved="false">
 
-                        <!-- Highest Spending Category -->
+                        <!-- Statistical insight: Category with highest total expenditure -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -948,7 +949,7 @@
                                 android:textSize="13sp" />
                         </LinearLayout>
 
-                        <!-- Lowest Spending Category -->
+                        <!-- Statistical insight: Category with lowest total expenditure -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -979,7 +980,7 @@
                                 android:textSize="13sp" />
                         </LinearLayout>
 
-                        <!-- Most Active Day of the week. -->
+                        <!-- Statistical insight: Day of the week with maximum transaction frequency -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -1009,7 +1010,7 @@
                                 android:textSize="13sp" />
                         </LinearLayout>
 
-                        <!-- Daily Average spending. -->
+                        <!-- Statistical insight: Mean daily expenditure within the current cycle -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -1040,7 +1041,7 @@
                                 android:textSize="13sp" />
                         </LinearLayout>
 
-                        <!-- A big section for the largest single expense. -->
+                        <!-- Statistical insight: Identification of the largest single debit transaction -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1090,7 +1091,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- A card to track a specific savings goal, like a 'New Car Fund'. -->
+            <!-- Progress tracking component for specific financial goals (e.g., Savings Target) -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -1134,7 +1135,7 @@
                             android:textSize="15sp" />
                     </RelativeLayout>
 
-                    <!-- Linear progress bar to show how close the user is to their goal. -->
+                    <!-- Linear progress indicator for goal completion status -->
                     <com.google.android.material.progressindicator.LinearProgressIndicator
                         android:id="@+id/savings_progress"
                         android:layout_width="match_parent"
@@ -1157,7 +1158,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Monthly Budget section with a RecyclerView to list categories. -->
+            <!-- Categorical budget overview section with a list of managed limits -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -1168,7 +1169,7 @@
                     android:text="Monthly Budget"
                     style="@style/FintechHeader"
                     android:textSize="18sp" />
-                <!-- A link to see all budgets. -->
+                <!-- Link to expand and view the full list of budget allocations -->
                 <TextView
                     android:id="@+id/btn_see_all_budgets"
                     android:layout_width="wrap_content"
@@ -1184,7 +1185,7 @@
                     android:background="?attr/selectableItemBackground" />
             </RelativeLayout>
 
-            <!-- This is where the list of budget categories will be displayed. -->
+            <!-- RecyclerView for dynamic listing of budget categories and their respective utilization -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/budget_recycler"
                 android:layout_width="match_parent"
@@ -1197,4 +1198,3 @@
     </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-

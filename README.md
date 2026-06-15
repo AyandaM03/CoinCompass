@@ -5,26 +5,350 @@
 
 **CoinCompass** is a user-friendly Android application designed to help you take control of your financial journey. Whether you're tracking daily expenses, setting savings goals, or managing spending categories, CoinCompass provides the tools you need to stay on track.
 
-##  Features
+##  Evolution of CoinCompass
 
-Professional Splash Screen: "Navigate Your Finances" is our tagline and the app logo will greet you. 
-• Secure Authentication: username-based login and registration for customized accounts. 
-• Intuitive Dashboard: With a modern, dark-green layout, you can quickly view your overall balance, monthly income, and expenses.  
-• Category Management: To arrange your expenditures, create and maintain unique expense categories (such as groceries, entertainment, and car fuel).  
-• Detailed Expense Tracking: Keep track of all expenses, including start and end times, amounts, dates, and descriptions.  
-• Financial Overview: Use visual progress bars to keep track of how much of your money you've spent in each category. • Expense History: A special area where you can see and examine all your previous transactions. 
-• Savings Summary: To make sure you meet your financial objectives, monitor your monthly expenditure caps. 
+This project began as **CoinCompass v1 (app-debug)** and was later redesigned and enhanced into **CoinCompass v2 (CCompass)**.
 
-##  App Screenshots
-<img width="1080" height="2340" alt="image" src="https://github.com/user-attachments/assets/6edb39d9-c435-4824-9556-8f46c222bc71" />
-<img width="738" height="1600" alt="image" src="https://github.com/user-attachments/assets/77f99f7e-cdea-4428-a412-9c41279b81e5" />
-<img width="738" height="1600" alt="image" src="https://github.com/user-attachments/assets/aabf051c-1fa3-4de9-83bc-dd475b9e6c0d" />
-<img width="1080" height="2340" alt="image" src="https://github.com/user-attachments/assets/f4860ce8-f876-4943-abec-5fb47e7318e3" />
-<img width="1080" height="2226" alt="image" src="https://github.com/user-attachments/assets/8cc4db65-8154-4f2a-bd6d-bfbed716fabe" />
-<img width="1080" height="2172" alt="image" src="https://github.com/user-attachments/assets/e8e982f0-05d1-4daa-9b26-2fb1a411effc" />
-<img width="1080" height="2258" alt="image" src="https://github.com/user-attachments/assets/3ac7c3b9-fdba-4d98-9e3c-4b8f56b24f1f" />
-<img width="1080" height="2283" alt="image" src="https://github.com/user-attachments/assets/ac91beca-bad7-4b48-b444-0e92bd9cafae" />
-<img width="1200" height="1920" alt="WhatsApp Image 2026-06-15 at 13 00 13" src="https://github.com/user-attachments/assets/6eecc245-29ab-4c83-9fb9-b1e96ce8896f" />
+The goal of Version 2 was to improve usability, introduce income management, provide better navigation, and create a more complete personal finance experience.
+
+---
+
+## Version Comparison
+
+| Feature             | CoinCompass v1 (app-debug) |  CoinCompass v2 (CCompass)           |
+| ------------------- | ----------------------------- | -------------------------------------- |
+| Monthly Income      | Hardcoded to R25,000          | User-defined income stored in database |
+| Income Tracking     | Not available                 | Dedicated Add Income screen            |
+| Dashboard Balance   | Based on fixed income         | Real-time calculations                 |
+| Navigation          | Quick action buttons only     | Bottom Navigation + Quick Actions      |
+| Transaction History | Expenses only                 | Income, Expenses & Goals               |
+| Filtering           | Not available                 | 4 filter tabs                          |
+| Financial Summary   | Basic                         | Monthly Income & Expense summaries     |
+| Income Database     | Not available                 | Dedicated Income table                 |
+| User Profile        | No income field               | monthlyIncome field added              |
+| Budget Progress     | Fixed R5000 limit             | Dynamic calculation                    |
+| Add Income          | Not available                 | Fully implemented                      |
+| Database Version    | Version 1                     | Version 2 with migration support       |
+| User Experience     | Basic finance tracker         | Complete finance management system     |
+
+---
+
+##  Major Improvements Added In Version 2
+
+### Income Management
+
+A completely new income management system was implemented.
+
+**Added:**
+
+* Add Income screen
+* Income source selection
+* Monthly income tracking
+* Income database table
+* Live balance updates
+
+---
+
+###  Transactions Dashboard
+
+The old expense history screen was replaced with a modern transactions hub.
+
+## Calendar page
+*Calendar is the timeline <br>
+*Filters control the view <br>
+*Transaction show categories <br>
+*Green + button
+
+<table>
+ <tr>
+  <td align="center">
+ <img width="300"  alt="WhatsApp Image 2026-06-15 at 13 00 14 (4)" src="https://github.com/user-attachments/assets/2ed09a58-1e71-4f79-9125-3c1f6fd229e5" />
+
+</td>
+<td align="center">
+ <img width="300" alt="WhatsApp Image 2026-06-15 at 13 00 18 (1)" src="https://github.com/user-attachments/assets/a9ff3a72-f46e-4924-a078-7afbb431991b" />
+
+</td>
+</tr>
+</table>
+
+
+**Analytics:**
+
+* Time filter 
+* category chart
+* Quick summary box :
+* Top Category 
+* Total Spending
+
+---
+<table>
+  <tr>
+  <td align="center">
+ <img width="300"  alt="WhatsApp Image 2026-06-15 at 13 00 18" src="https://github.com/user-attachments/assets/12b8fb5b-8703-4378-adac-8c400cc8d456" />
+
+</td>
+</table>
+
+**Gamification:**
+
+* More Options menu
+  *  ├── Transction Calender
+  *  ├── Expense History
+  * ├── Rewards and Challenges 
+  * └── Savings Goals
+  
+* Rewards and Challenges:
+  *  ├── play challenges 
+  *  ├── Challenges completed ad saving score
+  *  ├── level progress bar
+  *  ├── Coin Catch Challenge 
+  *  └── Unlocked Badges
+  
+* Game over screen:
+  *  ├── final Score
+  *  ├── Reward Points 
+  *  └── plat Again or Return to Dashboard
+
+<table>
+ <tr>
+  <td align="center">
+<img width="300"  alt="WhatsApp Image 2026-06-15 at 16 16 32 (1)" src="https://github.com/user-attachments/assets/715e01da-3297-44d7-9d6e-44923f42c9cb" />
+
+
+
+</td>
+<td align="center">
+<img width="300"  alt="WhatsApp Image 2026-06-15 at 16 34 31" src="https://github.com/user-attachments/assets/f95e10e9-8b8c-4b23-b45f-0f3ad02e1f2e" />
+
+
+</td>
+
+<td align="center">
+<img width="300"  alt="WhatsApp Image 2026-06-15 at 16 34 32 (1)" src="https://github.com/user-attachments/assets/0d777893-a944-41d4-b9b2-c25e23f59f69" />
+
+
+</td>
+</tr>
+</table>
+---
+
+**New Features:**
+
+* All Transactions tab
+* Income tab
+* Expenses tab
+* Goals tab
+* Monthly summary cards
+* Transaction badges
+* Colour-coded transaction types
+* Calender
+* smart Financial tips
+
+---
+
+###  Improved Navigation
+
+#### Version 1
+
+```text
+Dashboard
+ ├── Add Expense
+ ├── Categories
+ ├── Goals
+ └── History
+```
+
+#### Version 2
+
+```text
+Bottom Navigation
+ ├── Home
+ ├── Budgets
+ ├── Analytics
+ ├── Savings
+ ├── Transactions
+ ├── More
+     ├──Transactions calender
+     ├──Expense History
+     ├── Rewards and Challenges
+     └── Savings goal
+
+```
+<table>
+ <tr>
+  <td align="center">
+<img width="300"  alt="WhatsApp Image 2026-06-15 at 16 16 31" src="https://github.com/user-attachments/assets/190e334a-9f26-42bc-9947-5b35b21c0c4a" />
+
+</td>
+<td align="center">
+ <img width="300"  alt="WhatsApp Image 2026-06-15 at 16 16 32" src="https://github.com/user-attachments/assets/f3c5512e-0456-4e2b-85de-43920ebae1af" />
+
+
+</td>
+</tr>
+</table>
+
+---
+
+###  Database Improvements
+
+#### Version 1
+
+```text
+Users
+Categories
+Expenses
+Goals
+```
+
+#### Version 2
+
+```text
+Users
+Categories
+Expenses
+Goals
+Income ← NEW
+```
+
+Additional enhancement:
+
+```kotlin
+monthlyIncome: Double = 0.0
+```
+
+added to the User entity.
+
+---
+
+## Pictures Before vs After
+
+<table>
+<tr>
+<th>Version 1 (app-debug)</th>
+<th>Version 2 (CCompass)</th>
+</tr>
+
+<tr>
+  <td align="center">
+ <img width="300"  alt="image" src="https://github.com/user-attachments/assets/6edb39d9-c435-4824-9556-8f46c222bc71" />
+<br>
+splash page v1
+</td>
+<td align="center">
+ <img width="300"  alt="WhatsApp Image 2026-06-15 at 13 00 13" src="https://github.com/user-attachments/assets/46471620-f3c7-4d89-ac2d-784f94534968" />
+
+<br>
+improved splash
+</td>
+</tr>
+
+<tr>
+  <td align="center">
+ <img width="300"  alt="image" src="https://github.com/user-attachments/assets/77f99f7e-cdea-4428-a412-9c41279b81e5" />
+<br>
+login page v1
+</td>
+<td align="center">
+ <img width="300"  alt="WhatsApp Image 2026-06-15 at 13 00 14" src="https://github.com/user-attachments/assets/8df6bcb2-2e80-450b-9700-f139aa1af020" />
+<br>
+improved login
+</td>
+</tr>
+
+<tr>
+  <td align="center">
+
+<br>
+Registration page v1
+</td>
+<td align="center">
+<img width="300" alt="WhatsApp Image 2026-06-15 at 13 00 14 (1)" src="https://github.com/user-attachments/assets/07c1999c-74fc-45b0-aaa8-80e6616eb70d" />
+
+<br>
+improved registration
+</td>
+</tr>
+
+<tr>
+<td align="center">
+ <img width="300" alt="image" src="https://github.com/user-attachments/assets/aabf051c-1fa3-4de9-83bc-dd475b9e6c0d" />
+<br>
+Basic Dashboard
+  
+</td>
+
+<td align="center">
+<img width="300"  alt="WhatsApp Image 2026-06-15 at 13 00 14 (6)" src="https://github.com/user-attachments/assets/2e737edd-2e78-4f83-829e-43fd9123b5cf" />
+<br>
+Enhanced Dashboard
+</td>
+</tr>
+
+<tr>
+  <td align="center">
+<img width="300"  alt="image" src="https://github.com/user-attachments/assets/8cc4db65-8154-4f2a-bd6d-bfbed716fabe" />
+<br>
+Financial goals v1
+</td>
+<td align="center">
+<br>
+<img width="300"  alt="WhatsApp Image 2026-06-15 at 13 00 16 (2)" src="https://github.com/user-attachments/assets/d2b5814f-d930-40c4-bee1-67c06fe9ebe0" />
+
+improved Financial goals
+</td>
+</tr>
+
+<tr>
+<td align="center">
+<img width="300"  alt="image" src="https://github.com/user-attachments/assets/f4860ce8-f876-4943-abec-5fb47e7318e3" />
+  <br/>
+Expense History
+</td>
+
+<td align="center">
+<img width="300"  alt="WhatsApp Image 2026-06-15 at 13 00 17" src="https://github.com/user-attachments/assets/fac07800-decd-43b2-8340-bceadaeb20b5" />
+<br>
+Transactions Hub
+</td>
+</tr>
+
+<tr>
+<td align="center">
+❌ No Income Tracking
+</td>
+
+<td align="center">
+  <img width="300" alt="WhatsApp Image 2026-06-15 at 13 00 15" src="https://github.com/user-attachments/assets/20fe95d8-f629-46fe-8c9a-135fc785293c" />
+<br/>
+✅ Income Tracking
+</td>
+</tr>
+
+</table>
+
+---
+
+##  Project Outcome
+
+CoinCompass evolved from a basic expense tracker into a complete personal finance management application.
+
+### Results Achieved
+
+✅ Income tracking implemented
+
+✅ Real-time balance calculations
+
+✅ Improved navigation
+
+✅ Better database architecture
+
+✅ Enhanced user experience
+
+✅ Scalable design for future development
+
+✅ More professional and modern UI
 
 
 

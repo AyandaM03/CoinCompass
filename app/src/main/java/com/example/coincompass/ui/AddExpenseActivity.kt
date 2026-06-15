@@ -25,32 +25,30 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 /**
- * This is where I let users add their expenses or income. 
- * I tried to make it look really professional with animations and a live preview!
+ * Activity for managing financial records (Expenses and Income).
+ * Supports creation, modification, and attachment of receipt documentation.
  */
 class AddExpenseActivity : AppCompatActivity() {
 
-    // ViewBinding is a lifesaver, no more findViewByID!
     private lateinit var binding: ActivityAddExpenseBinding
     private lateinit var db: AppDatabase
-    private val calendar = Calendar.getInstance() // I'll use this for the date picker.
+    private val calendar = Calendar.getInstance()
     private var selectedImageUri: String? = null
     private var editExpenseId: Long = -1
-    private var selectedType = "Expense" // Defaulting to Expense.
+    private var selectedType = "Expense"
 
-    // This is for picking a photo from the gallery. Android's new API makes this easy.
+    // Launcher for handling image selection from external document providers
     private val pickImage = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         if (uri != null) {
             handleImageResult(uri)
         }
     }
 
-    // This is for taking a quick photo of a receipt!
+    // Launcher for capturing receipt images using the system camera
     private val takePhoto = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             val bitmap = result.data?.extras?.get("data") as? Bitmap
             if (bitmap != null) {
-                // I show the image in a small preview window.
                 binding.receiptPreview.visibility = View.VISIBLE
                 binding.receiptPreview.setImageBitmap(bitmap)
                 selectedImageUri = "camera_bitmap" 
@@ -63,28 +61,25 @@ class AddExpenseActivity : AppCompatActivity() {
         binding = ActivityAddExpenseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initializing my database.
         db = AppDatabase.getDatabase(this)
         
-        // If I got an ID from the previous screen, it means we are EDITING, not adding new.
+        // Check for record ID to determine if activity is in Edit Mode
         editExpenseId = intent.getLongExtra("expense_id", -1)
 
-        // Setting up all my UI stuff in separate functions to keep onCreate clean.
         setupCategoryDropdown()
         setupListeners()
         setupRealTimePreview()
         
         if (isEditMode()) {
-            loadExpenseData() // Load the old data so the user can change it.
+            loadExpenseData()
         } else {
-            updateTypeSelectorUI() // Just show the default view.
+            updateTypeSelectorUI()
         }
     }
 
-    // Helper to see if we are in edit mode.
     private fun isEditMode() = editExpenseId != -1L
 
-    // If we are editing, I pull the data from the DB and put it in the fields.
+    // Fetches existing record details and populates form fields for modification
     private fun loadExpenseData() {
         binding.headerTitle.text = "Edit Transaction"
         binding.saveExpenseButton.text = "Update Transaction"
@@ -113,19 +108,17 @@ class AddExpenseActivity : AppCompatActivity() {
         }
     }
 
-    // This fills the dropdown with categories I have in the database.
+    // Populates the category AutoCompleteTextView with data from the Room database
     private fun setupCategoryDropdown() {
         db.categoryDao().getAllCategories().observe(this) { categories ->
             val categoryNames = categories.map { it.name }
-            // Using a simple adapter for the dropdown list.
             val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, categoryNames)
             binding.categorySpinnerText.setAdapter(adapter)
         }
     }
 
-    // Here I set up all the buttons.
+    // Initialization of interactive UI components and their event handlers
     private fun setupListeners() {
-        // I love this DatePickerDialog, it makes choosing dates so much easier.
         binding.dateEdit.setOnClickListener {
             DatePickerDialog(this, { _, year, month, dayOfMonth ->
                 calendar.set(Calendar.YEAR, year)
@@ -137,16 +130,13 @@ class AddExpenseActivity : AppCompatActivity() {
 
         binding.btnBack.setOnClickListener { finish() }
 
-        // Choosing a receipt from the gallery.
         binding.btnGallery.setOnClickListener { pickImage.launch(arrayOf("image/*")) }
 
-        // Taking a new receipt photo.
         binding.btnCamera.setOnClickListener {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             takePhoto.launch(intent)
         }
 
-        // Clicking these cards switches between Expense and Income.
         binding.cardTypeExpense.setOnClickListener {
             selectedType = "Expense"
             updateTypeSelectorUI()
@@ -157,13 +147,12 @@ class AddExpenseActivity : AppCompatActivity() {
             updateTypeSelectorUI()
         }
 
-        // The big save button!
         binding.saveExpenseButton.setOnClickListener {
             saveTransaction()
         }
     }
 
-    // This function handles the visual changes when you switch between Expense and Income.
+    // Updates the visual state of the transaction type selection cards
     private fun updateTypeSelectorUI() {
         val primaryGreen = ContextCompat.getColor(this, R.color.primary_green)
         val goldAccent = ContextCompat.getColor(this, R.color.gold_accent)
@@ -171,7 +160,6 @@ class AddExpenseActivity : AppCompatActivity() {
         val textGrey = ContextCompat.getColor(this, R.color.text_grey)
 
         if (selectedType == "Expense") {
-            // I used animations here to make the cards 'pop' when selected!
             binding.cardTypeExpense.apply {
                 setCardBackgroundColor(goldAccent)
                 cardElevation = 12f
@@ -207,7 +195,6 @@ class AddExpenseActivity : AppCompatActivity() {
         updatePreviewColors()
     }
 
-    // Formats the date so it looks nice.
     private fun updateDateDisplay() {
         val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val dateStr = format.format(calendar.time)
@@ -215,7 +202,7 @@ class AddExpenseActivity : AppCompatActivity() {
         binding.previewDate.text = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(calendar.time)
     }
 
-    // This is a cool feature: as the user types, the preview card at the top updates!
+    // Implementation of TextWatchers to provide immediate UI feedback as form data is entered
     private fun setupRealTimePreview() {
         val watcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -231,7 +218,6 @@ class AddExpenseActivity : AppCompatActivity() {
         updateDateDisplay()
     }
 
-    // Updating the preview card with the latest info.
     private fun updatePreviewFromInputs() {
         val amountStr = binding.amountEdit.text.toString()
         binding.previewAmount.text = if (amountStr.isEmpty()) "R 0.00" else "R $amountStr"
@@ -246,7 +232,6 @@ class AddExpenseActivity : AppCompatActivity() {
         }
     }
 
-    // Income is green, Expense is red. Classic!
     private fun updatePreviewColors() {
         if (selectedType == "Income") {
             binding.previewAmount.setTextColor(ContextCompat.getColor(this, R.color.income_green))
@@ -255,7 +240,7 @@ class AddExpenseActivity : AppCompatActivity() {
         }
     }
 
-    // This part was tricky. I had to make sure the app can still see the image later.
+    // Persists access permissions for selected image URIs across application restarts
     private fun handleImageResult(uri: Uri) {
         try {
             contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -267,14 +252,13 @@ class AddExpenseActivity : AppCompatActivity() {
         binding.receiptPreview.setImageURI(uri)
     }
 
-    // Finally, saving everything to the database.
+    // Persists the validated transaction entity to the local Room database
     private fun saveTransaction() {
         val category = binding.categorySpinnerText.text.toString()
         val amountStr = binding.amountEdit.text.toString()
         val date = binding.dateEdit.text.toString()
         val notes = binding.notesEdit.text.toString()
 
-        // Making sure they filled in the important stuff.
         if (category.isNotEmpty() && amountStr.isNotEmpty() && date.isNotEmpty()) {
             val amount = amountStr.toDoubleOrNull() ?: 0.0
             
@@ -298,7 +282,7 @@ class AddExpenseActivity : AppCompatActivity() {
                 }
 
                 Toast.makeText(this@AddExpenseActivity, "Transaction saved successfully!", Toast.LENGTH_SHORT).show()
-                finish() // All done, go back!
+                finish()
             }
         } else {
             Toast.makeText(this, "Please fill in required fields", Toast.LENGTH_SHORT).show()
