@@ -99,7 +99,13 @@ class HistoryActivity : AppCompatActivity() {
                         holder.binding.transactionImage.setImageResource(android.R.drawable.ic_menu_camera)
                     } else {
                         try {
-                            holder.binding.transactionImage.setImageURI(Uri.parse(item.photoPath))
+                            val uri = Uri.parse(item.photoPath)
+                            // Verify permission by attempting to open stream, avoiding deferred crash in onMeasure
+                            context.contentResolver.openInputStream(uri)?.use { 
+                                holder.binding.transactionImage.setImageURI(uri)
+                            } ?: run {
+                                holder.binding.transactionImage.visibility = View.GONE
+                            }
                         } catch (e: Exception) {
                             Log.e("HistoryActivity", "Error loading image", e)
                             holder.binding.transactionImage.visibility = View.GONE

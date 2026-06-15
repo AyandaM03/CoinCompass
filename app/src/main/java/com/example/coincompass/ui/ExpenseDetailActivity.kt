@@ -59,7 +59,13 @@ class ExpenseDetailActivity : AppCompatActivity() {
                                 binding.detailImage.setImageResource(android.R.drawable.ic_menu_camera)
                             } else {
                                 try {
-                                    binding.detailImage.setImageURI(Uri.parse(expense.photoPath))
+                                    val uri = Uri.parse(expense.photoPath)
+                                    // Verify permission by attempting to open stream, avoiding deferred crash in onMeasure
+                                    contentResolver.openInputStream(uri)?.use { 
+                                        binding.detailImage.setImageURI(uri)
+                                    } ?: run {
+                                        binding.receiptCard.visibility = View.GONE
+                                    }
                                 } catch (e: Exception) {
                                     Log.e("ExpenseDetailActivity", "Error loading image", e)
                                     binding.receiptCard.visibility = View.GONE
