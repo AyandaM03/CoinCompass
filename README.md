@@ -394,7 +394,7 @@ Made with passion to assist you in managing your money.
 
 ##  Video Demonstration
 
-YouTube Link: https://youtube.com/shorts/z0DBXnjCBFE?si=W9KdymYNWDlwDhU6
+YouTube Link: https://youtu.be/rwZit2X3NfM?si=tksu2mAi5wB9nuwn 
 
 ##  References:
 
@@ -420,3 +420,5 @@ Git (2025) Git Documentation. Available at: https://git-scm.com/docs
 
 PDFSimpli (2026) Free Text to Speech Tool. Available at: https://pdfsimpli.com/lp/text-to-speech/?uh=Free%20Text%20to%20Speech&account=242-758-0902&utm_source=google&utm_medium=sem&utm_campaign=23663256363&utm_term=free%20text%20to%20speech&network=g&device=m&adposition=&adgroupid=195118460795&placement=&location=1028995&gad_source=1&gad_campaignid=23663256363&gclid=CjwKCAjwtcHPBhADEiwAWo3sJvUwKF66zh7VoH9qiwHGzWXQv46omaWkCe8dHgvudk9r-M0YXGZ-PBoC_W8QAvD_BwE
 (Accessed: 28 April 2026).
+
+NarrateAI, 2026. NarrateAI [online web application]. Available from: https://narrateai.app/app [Accessed 16 June 2026].
