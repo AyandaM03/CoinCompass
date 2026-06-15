@@ -15,6 +15,7 @@ import com.example.coincompass.R
 import com.example.coincompass.data.AppDatabase
 import com.example.coincompass.data.CategorySummary
 import com.example.coincompass.databinding.FragmentAnalyticsBinding
+import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -49,8 +50,19 @@ class AnalyticsFragment : Fragment() {
         setupBarChart()
         setupListeners()
         
-        // Initial load: 7 days
-        updatePeriod(Period.LAST_7_DAYS)
+        // Check for navigation arguments from Calendar
+        val argStart = arguments?.getString("startDate")
+        val argEnd = arguments?.getString("endDate")
+        
+        if (!argStart.isNullOrEmpty() && !argEnd.isNullOrEmpty()) {
+            startDate = argStart
+            endDate = argEnd
+            binding.filterChipGroup.clearCheck()
+            fetchData()
+        } else {
+            // Initial load: 7 days
+            updatePeriod(Period.LAST_7_DAYS)
+        }
     }
 
     private fun setupBarChart() {
@@ -68,18 +80,20 @@ class AnalyticsFragment : Fragment() {
                 setDrawGridLines(false)
                 textColor = Color.BLACK
                 granularity = 1f
-                labelRotationAngle = -45f
+                labelRotationAngle = -30f
+                yOffset = 10f
             }
             
             axisLeft.apply {
                 setDrawGridLines(true)
                 textColor = Color.BLACK
                 axisMinimum = 0f
+                xOffset = 10f
             }
             
             axisRight.isEnabled = false
             legend.isEnabled = false
-            animateY(1000)
+            animateY(1200)
 
             setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
                 override fun onValueSelected(e: com.github.mikephil.charting.data.Entry?, h: Highlight?) {
@@ -158,22 +172,74 @@ class AnalyticsFragment : Fragment() {
         }
 
         val dataSet = BarDataSet(entries, "Spending")
-        // Use CoinCompass Analytics Blue
-        dataSet.color = Color.parseColor("#1976D2") 
+        
+        // Specific Category Colors
+        val colors = summaries.map { summary ->
+            when (summary.categoryName.lowercase()) {
+                "food", "groceries", "dining" -> Color.parseColor("#FB8C00") // Orange
+                "transport", "travel", "fuel" -> Color.parseColor("#1E88E5") // Blue
+                "entertainment", "fun", "hobbies" -> Color.parseColor("#8E24AA") // Purple
+                "health", "medical", "wellness" -> Color.parseColor("#E53935") // Red
+                "savings", "investment", "income" -> Color.parseColor("#43A047") // Green
+                else -> Color.parseColor("#1976D2") // Default Blue
+            }
+        }
+        
+        dataSet.colors = colors
         dataSet.valueTextColor = Color.BLACK
-        dataSet.valueTextSize = 12f
+        dataSet.valueTextSize = 10f
         dataSet.valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
-                return "R${"%.0f".format(value)}"
+                return if (value > 0) "R${"%.0f".format(value)}" else ""
             }
         }
 
         binding.categoryBarChart.apply {
-            data = BarData(dataSet)
+            val barData = BarData(dataSet)
+            barData.barWidth = 0.5f // Reduced width by 50% for cleaner look
+            data = barData
+            
             xAxis.valueFormatter = IndexAxisValueFormatter(summaries.map { it.categoryName })
+            
+            // Goals Integration with new colors
+            val currentMonth = SimpleDateFormat("yyyy-MM", Locale.getDefault()).format(Date())
+            db.goalDao().getGoalForMonth(currentMonth).observe(viewLifecycleOwner) { goal ->
+                axisLeft.removeAllLimitLines()
+                if (goal != null && (goal.minGoal > 0 || goal.maxGoal > 0)) {
+                    binding.noGoalsMessage.visibility = View.GONE
+                    
+                    if (goal.minGoal > 0) {
+                        val minLine = LimitLine(goal.minGoal.toFloat(), "Min Goal").apply {
+                            lineWidth = 2.5f
+                            lineColor = Color.parseColor("#F9A825") // Gold/Yellow
+                            enableDashedLine(12f, 8f, 0f)
+                            labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
+                            textSize = 10f
+                            textColor = Color.parseColor("#F9A825")
+                        }
+                        axisLeft.addLimitLine(minLine)
+                    }
+
+                    if (goal.maxGoal > 0) {
+                        val maxLine = LimitLine(goal.maxGoal.toFloat(), "Max Limit").apply {
+                            lineWidth = 2.5f
+                            lineColor = ContextCompat.getColor(requireContext(), R.color.expense_red) // Red
+                            enableDashedLine(12f, 8f, 0f)
+                            labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
+                            textSize = 10f
+                            textColor = ContextCompat.getColor(requireContext(), R.color.expense_red)
+                        }
+                        axisLeft.addLimitLine(maxLine)
+                    }
+                } else {
+                    binding.noGoalsMessage.visibility = View.VISIBLE
+                }
+                invalidate()
+            }
+
             notifyDataSetChanged()
             invalidate()
-            animateY(800)
+            animateY(1400, com.github.mikephil.charting.animation.Easing.EaseOutBack)
         }
 
         // Insights

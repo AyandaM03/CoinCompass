@@ -240,23 +240,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                app:cardCornerRadius="24dp">
+                app:cardCornerRadius="24dp"
+                app:cardElevation="2dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="20dp">
+                    android:padding="24dp">
 
                     <com.google.android.material.progressindicator.CircularProgressIndicator
                         android:id="@+id/health_progress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:progress="0"
-                        app:indicatorSize="80dp"
-                        app:trackThickness="8dp"
+                        app:indicatorSize="84dp"
+                        app:trackThickness="10dp"
                         app:indicatorColor="@color/primary_green"
-                        app:trackColor="@color/soft_mint"
-                        app:trackCornerRadius="4dp"
+                        app:trackColor="#F1F3F4"
+                        app:trackCornerRadius="5dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent" />
@@ -268,7 +269,7 @@
                         android:text="0%"
                         android:textStyle="bold"
                         android:textColor="@color/dark_text"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         app:layout_constraintBottom_toBottomOf="@id/health_progress"
                         app:layout_constraintEnd_toEndOf="@id/health_progress"
                         app:layout_constraintStart_toStartOf="@id/health_progress"
@@ -278,7 +279,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="24dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/health_progress"
                         app:layout_constraintTop_toTopOf="parent"
@@ -288,9 +289,9 @@
                             android:id="@+id/budget_status_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Checking status..."
+                            android:text="On Track"
                             android:textStyle="bold"
-                            android:textSize="16sp"
+                            android:textSize="18sp"
                             android:textColor="@color/primary_green" />
 
                         <TextView
@@ -298,21 +299,273 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="R0.00 spent this month"
-                            android:textColor="@color/text_grey"
-                            android:textSize="13sp"
-                            android:layout_marginTop="2dp" />
+                            android:textColor="@color/text_charcoal"
+                            android:textSize="14sp"
+                            android:layout_marginTop="4dp" />
 
                         <TextView
                             android:id="@+id/goal_range_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Goal: R0 - R0"
+                            android:text="Goal Range: R0 - R0"
                             android:textColor="@color/text_grey"
                             android:textSize="12sp"
                             android:layout_marginTop="2dp" />
                     </LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Financial Health Score Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/financial_health_score_card"
+                style="@style/FintechCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="2dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="24dp">
+
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/score_progress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:progress="0"
+                        app:indicatorSize="84dp"
+                        app:trackThickness="10dp"
+                        app:indicatorColor="@color/primary_green"
+                        app:trackColor="#F1F3F4"
+                        app:trackCornerRadius="5dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <TextView
+                        android:id="@+id/score_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textStyle="bold"
+                        android:textColor="@color/dark_text"
+                        android:textSize="20sp"
+                        app:layout_constraintBottom_toBottomOf="@id/score_progress"
+                        app:layout_constraintEnd_toEndOf="@id/score_progress"
+                        app:layout_constraintStart_toStartOf="@id/score_progress"
+                        app:layout_constraintTop_toTopOf="@id/score_progress" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginStart="24dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/score_progress"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Financial Health Score"
+                            android:textStyle="bold"
+                            android:textSize="17sp"
+                            android:textColor="@color/dark_text" />
+
+                        <TextView
+                            android:id="@+id/score_status_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Needs Improvement"
+                            android:textColor="@color/expense_red"
+                            android:textSize="14sp"
+                            android:layout_marginTop="2dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Based on goals &amp; tracking"
+                            android:textColor="@color/text_grey"
+                            android:textSize="11sp"
+                            android:layout_marginTop="4dp" />
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Monthly Financial Summary Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/monthly_summary_card"
+                style="@style/FintechCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Monthly Summary"
+                            style="@style/FintechSubHeader"
+                            android:textStyle="bold"
+                            android:textColor="@color/primary_green" />
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="0dp"
+                            app:cardBackgroundColor="@color/soft_mint"
+                            app:strokeWidth="1dp"
+                            app:strokeColor="@color/primary_green">
+                            <TextView
+                                android:id="@+id/summary_status_badge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="4dp"
+                                android:text="Excellent"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/primary_green" />
+                        </com.google.android.material.card.MaterialCardView>
+                    </RelativeLayout>
+
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:columnCount="2"
+                        android:rowCount="2">
+
+                        <!-- Total Income -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:orientation="vertical"
+                            android:padding="8dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Total Income"
+                                android:textSize="11sp"
+                                android:textColor="@color/text_grey"
+                                android:drawableStart="@drawable/ic_add"
+                                android:drawablePadding="4dp"
+                                app:drawableTint="@color/primary_green" />
+                            <TextView
+                                android:id="@+id/summary_income_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="R0.00"
+                                android:textStyle="bold"
+                                android:textColor="@color/primary_green"
+                                android:textSize="15sp"
+                                android:layout_marginTop="4dp" />
+                        </LinearLayout>
+
+                        <!-- Total Expenses -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:orientation="vertical"
+                            android:padding="8dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Total Expenses"
+                                android:textSize="11sp"
+                                android:textColor="@color/text_grey"
+                                android:drawableStart="@drawable/ic_history"
+                                android:drawablePadding="4dp"
+                                app:drawableTint="@color/expense_red" />
+                            <TextView
+                                android:id="@+id/summary_expenses_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="R0.00"
+                                android:textStyle="bold"
+                                android:textColor="@color/expense_red"
+                                android:textSize="15sp"
+                                android:layout_marginTop="4dp" />
+                        </LinearLayout>
+
+                        <!-- Total Saved -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:orientation="vertical"
+                            android:padding="8dp"
+                            android:layout_marginTop="12dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Total Saved"
+                                android:textSize="11sp"
+                                android:textColor="@color/text_grey"
+                                android:drawableStart="@drawable/ic_goals"
+                                android:drawablePadding="4dp"
+                                app:drawableTint="@color/gold_accent" />
+                            <TextView
+                                android:id="@+id/summary_saved_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="R0.00"
+                                android:textStyle="bold"
+                                android:textColor="@color/gold_accent"
+                                android:textSize="15sp"
+                                android:layout_marginTop="4dp" />
+                        </LinearLayout>
+
+                        <!-- Remaining Budget -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:orientation="vertical"
+                            android:padding="8dp"
+                            android:layout_marginTop="12dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Remaining Budget"
+                                android:textSize="11sp"
+                                android:textColor="@color/text_grey"
+                                android:drawableStart="@drawable/ic_transactions"
+                                android:drawablePadding="4dp"
+                                app:drawableTint="@color/primary_green" />
+                            <TextView
+                                android:id="@+id/summary_remaining_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="R0.00"
+                                android:textStyle="bold"
+                                android:textColor="@color/primary_green"
+                                android:textSize="15sp"
+                                android:layout_marginTop="4dp" />
+                        </LinearLayout>
+
+                    </GridLayout>
+
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Quick Actions Grid -->
@@ -358,6 +611,465 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
             </LinearLayout>
+
+            <!-- Daily Coin Challenge Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/challenge_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#FFF9C4"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/coin_bag" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Daily Coin Challenge"
+                                android:textColor="@color/dark_text"
+                                android:textStyle="bold"
+                                android:textSize="18sp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Play to earn reward points!"
+                                android:textColor="@color/text_grey"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="POINTS"
+                                android:textSize="10sp"
+                                android:textColor="@color/text_grey" />
+                            <TextView
+                                android:id="@+id/dashboard_points"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textSize="16sp"
+                                android:textColor="@color/dark_text"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="LEVEL"
+                                android:textSize="10sp"
+                                android:textColor="@color/text_grey" />
+                            <TextView
+                                android:id="@+id/dashboard_level"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1"
+                                android:textSize="16sp"
+                                android:textColor="@color/primary_green"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.2"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="GAMES PLAYED"
+                                android:textSize="10sp"
+                                android:textColor="@color/text_grey" />
+                            <TextView
+                                android:id="@+id/dashboard_games"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textSize="16sp"
+                                android:textColor="@color/dark_text"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_play_challenge"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Play Now"
+                        android:backgroundTint="@color/gold_accent"
+                        android:textColor="@color/white"
+                        app:cornerRadius="12dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Smart Financial Tips Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="Smart Financial Tips"
+                style="@style/FintechHeader"
+                android:textSize="18sp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/smart_tips_card"
+                style="@style/FintechCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:cardCornerRadius="24dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:id="@+id/tip_1_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingVertical="8dp">
+                        <ImageView
+                            android:id="@+id/tip_1_icon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_analytics"
+                            app:tint="@color/primary_green" />
+                        <TextView
+                            android:id="@+id/tip_1_text"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:text="Your savings rate is looking healthy this month!"
+                            android:textColor="@color/dark_text"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#10000000"
+                        android:layout_marginVertical="4dp" />
+
+                    <LinearLayout
+                        android:id="@+id/tip_2_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingVertical="8dp">
+                        <ImageView
+                            android:id="@+id/tip_2_icon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_categories"
+                            app:tint="@color/gold_accent" />
+                        <TextView
+                            android:id="@+id/tip_2_text"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:text="Consider reducing food spending to reach your car goal faster."
+                            android:textColor="@color/dark_text"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#10000000"
+                        android:layout_marginVertical="4dp" />
+
+                    <LinearLayout
+                        android:id="@+id/tip_3_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingVertical="8dp">
+                        <ImageView
+                            android:id="@+id/tip_3_icon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_goals"
+                            app:tint="@color/primary_green" />
+                        <TextView
+                            android:id="@+id/tip_3_text"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:text="You've stayed within 70% of your budget so far. Great job!"
+                            android:textColor="@color/dark_text"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Spending Insights Section -->
+            <TextView
+                android:id="@+id/insights_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="Spending Insights"
+                style="@style/FintechHeader"
+                android:textSize="18sp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/insights_container_card"
+                style="@style/FintechCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:cardCornerRadius="24dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/insufficient_data_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Not enough spending data available."
+                        android:textColor="@color/text_grey"
+                        android:textSize="14sp"
+                        android:gravity="center"
+                        android:padding="20dp"
+                        android:visibility="gone" />
+
+                    <GridLayout
+                        android:id="@+id/insights_grid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:columnCount="2"
+                        android:alignmentMode="alignMargins"
+                        android:columnOrderPreserved="false">
+
+                        <!-- Top Category -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:orientation="vertical"
+                            android:padding="12dp"
+                            android:background="@drawable/nav_item_bg"
+                            android:layout_margin="4dp">
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_categories"
+                                app:tint="@color/expense_red" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Highest Spending"
+                                android:textSize="10sp"
+                                android:textColor="@color/text_grey"
+                                android:layout_marginTop="8dp" />
+                            <TextView
+                                android:id="@+id/insight_highest_cat"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="--"
+                                android:textStyle="bold"
+                                android:textColor="@color/dark_text"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <!-- Lowest Category -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:orientation="vertical"
+                            android:padding="12dp"
+                            android:background="@drawable/nav_item_bg"
+                            android:layout_margin="4dp">
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_categories"
+                                app:tint="@color/primary_green" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Lowest Spending"
+                                android:textSize="10sp"
+                                android:textColor="@color/text_grey"
+                                android:layout_marginTop="8dp" />
+                            <TextView
+                                android:id="@+id/insight_lowest_cat"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="--"
+                                android:textStyle="bold"
+                                android:textColor="@color/dark_text"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <!-- Most Active Day -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:orientation="vertical"
+                            android:padding="12dp"
+                            android:background="@drawable/nav_item_bg"
+                            android:layout_margin="4dp">
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_calendar"
+                                app:tint="@color/gold_accent" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Most Active Day"
+                                android:textSize="10sp"
+                                android:textColor="@color/text_grey"
+                                android:layout_marginTop="8dp" />
+                            <TextView
+                                android:id="@+id/insight_active_day"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="--"
+                                android:textStyle="bold"
+                                android:textColor="@color/dark_text"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <!-- Avg Daily -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:orientation="vertical"
+                            android:padding="12dp"
+                            android:background="@drawable/nav_item_bg"
+                            android:layout_margin="4dp">
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_analytics"
+                                app:tint="@color/secondary_green" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Daily Average"
+                                android:textSize="10sp"
+                                android:textColor="@color/text_grey"
+                                android:layout_marginTop="8dp" />
+                            <TextView
+                                android:id="@+id/insight_daily_avg"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="R0.00"
+                                android:textStyle="bold"
+                                android:textColor="@color/dark_text"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <!-- Largest Expense -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_columnSpan="2"
+                            android:orientation="horizontal"
+                            android:padding="12dp"
+                            android:background="@drawable/nav_item_bg"
+                            android:layout_margin="4dp"
+                            android:gravity="center_vertical">
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_transactions"
+                                app:tint="@color/expense_red" />
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="12dp"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Largest Single Expense"
+                                    android:textSize="10sp"
+                                    android:textColor="@color/text_grey" />
+                                <TextView
+                                    android:id="@+id/insight_largest_expense"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="--"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/dark_text"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+                            <TextView
+                                android:id="@+id/insight_largest_amount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="R0.00"
+                                android:textStyle="bold"
+                                android:textColor="@color/expense_red"
+                                android:textSize="15sp" />
+                        </LinearLayout>
+
+                    </GridLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Active Savings Goal Card -->
             <TextView

@@ -33,6 +33,9 @@
         <activity android:name=".ui.ExpenseDetailActivity" />
         <activity android:name=".ui.SetGoalActivity" />
         <activity android:name=".ui.AddSavingsGoalActivity" />
+        <activity android:name=".ui.BoostGoalActivity" />
+        <activity android:name=".ui.GameActivity" />
+        <activity android:name=".ui.RewardsActivity" />
         <activity android:name=".MainActivity" />
 
     </application>

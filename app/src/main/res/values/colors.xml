@@ -2,8 +2,9 @@
 <resources>
     <!-- Core Brand Palette -->
     <color name="primary_green">#2E7D32</color>
+    <color name="forest_green">#1B5E20</color>
     <color name="secondary_green">#2E8B57</color>
-    <color name="soft_mint">#DFF5E1</color>
+    <color name="soft_mint">#F0F9F1</color>
     <color name="gold_accent">#F9A825</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
@@ -18,7 +19,7 @@
     <color name="light_grey">#F8F9FA</color>
 
     <!-- Backgrounds -->
-    <color name="background_off_white">#FFFFFF</color>
+    <color name="background_off_white">#F8F9FA</color>
     <color name="background_color">#FFFFFF</color>
     <color name="cream_surface">#FFFFFF</color>
 

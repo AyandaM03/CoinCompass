@@ -9,173 +9,128 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:elevation="2dp">
+        android:background="@color/background_off_white"
+        app:elevation="0dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="20dp"
-            android:paddingTop="56dp"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingTop="16dp"
             android:paddingBottom="16dp">
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_back"
+                app:tint="@color/primary_green"
+                android:layout_marginStart="-12dp"
+                android:layout_marginBottom="8dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Financial Goals"
                 style="@style/FintechHeader"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:textColor="@color/primary_green"
+                android:textSize="28sp" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Track your progress and build wealth"
+                android:textColor="@color/text_grey"
+                android:textSize="14sp" />
+
+        </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="20dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="80dp">
+            android:paddingHorizontal="24dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="100dp">
 
-            <!-- Goal Range Card -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/goal_range_card"
-                style="@style/FintechCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Current Savings Strategy"
-                        style="@style/FintechSubHeader"
-                        android:textStyle="bold"
-                        android:textColor="@color/primary_green" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Minimum Goal"
-                                android:textColor="@color/cat_transport"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
-                            <TextView
-                                android:id="@+id/min_goal_text"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="R5,000.00"
-                                android:textColor="@color/text_charcoal"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/light_grey"
-                            android:layout_marginHorizontal="16dp" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Maximum Goal"
-                                android:textColor="@color/primary_green"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
-                            <TextView
-                                android:id="@+id/max_goal_text"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="R15,000.00"
-                                android:textColor="@color/text_charcoal"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Performance Section with Gauge Chart Placeholder -->
+            <!-- Performance Overview Card (Gauge) -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/performance_card"
-                style="@style/FintechCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp">
+                app:cardCornerRadius="24dp"
+                app:cardElevation="8dp"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/premium_green_gradient"
                     android:orientation="vertical"
-                    android:padding="20dp"
-                    android:gravity="center">
+                    android:padding="24dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Performance Overview"
-                        style="@style/FintechSubHeader"
-                        android:layout_gravity="start"
+                        android:textColor="#CCFFFFFF"
+                        android:textSize="13sp"
+                        android:textAllCaps="true"
+                        android:letterSpacing="0.1"
                         android:textStyle="bold" />
 
-                    <!-- Placeholder for semi-circular gauge chart -->
                     <RelativeLayout
-                        android:layout_width="200dp"
-                        android:layout_height="100dp"
-                        android:layout_marginTop="16dp">
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center">
 
                         <com.google.android.material.progressindicator.CircularProgressIndicator
                             android:id="@+id/performance_gauge"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:progress="75"
-                            app:indicatorSize="200dp"
-                            app:trackThickness="20dp"
-                            app:indicatorColor="@color/primary_green"
-                            app:trackColor="@color/light_grey"
-                            app:trackCornerRadius="10dp"
-                            android:rotation="270" />
+                            android:progress="0"
+                            app:indicatorSize="180dp"
+                            app:trackThickness="16dp"
+                            app:indicatorColor="@color/gold_accent"
+                            app:trackColor="#33FFFFFF"
+                            app:trackCornerRadius="8dp" />
 
-                        <TextView
-                            android:id="@+id/performance_status_text"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:layout_marginTop="20dp"
-                            android:text="WITHIN GOAL"
-                            android:textColor="@color/primary_green"
-                            android:textStyle="bold"
-                            android:textSize="14sp" />
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+                                android:id="@+id/performance_status_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="ON TRACK"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/performance_percent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0%"
+                                android:textColor="@color/white"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
                     </RelativeLayout>
 
                     <LinearLayout
@@ -183,40 +138,119 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
                         android:orientation="horizontal"
+                        android:baselineAligned="false">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Total Goals"
+                                android:textColor="#B3FFFFFF"
+                                android:textSize="11sp"
+                                android:textAllCaps="true" />
+                            <TextView
+                                android:id="@+id/total_goals_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Completed"
+                                android:textColor="#B3FFFFFF"
+                                android:textSize="11sp"
+                                android:textAllCaps="true" />
+                            <TextView
+                                android:id="@+id/completed_goals_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:orientation="vertical"
+                            android:gravity="center">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Total Saved"
+                                android:textColor="#B3FFFFFF"
+                                android:textSize="11sp"
+                                android:textAllCaps="true" />
+                            <TextView
+                                android:id="@+id/total_saved_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="R0.00"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
                         android:gravity="center">
 
                         <TextView
+                            android:id="@+id/label_red"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Under"
+                            android:text="0-49%"
+                            android:textColor="#CCFFFFFF"
                             android:textSize="11sp"
-                            android:textColor="@color/cat_transport"
-                            android:drawablePadding="4dp"
-                            app:drawableStartCompat="@android:drawable/presence_away"
-                            app:drawableTint="@color/cat_transport" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:text="Within"
-                            android:textSize="11sp"
-                            android:textColor="@color/primary_green"
-                            android:drawablePadding="4dp"
-                            app:drawableStartCompat="@android:drawable/presence_online"
-                            app:drawableTint="@color/primary_green" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:text="Over"
-                            android:textSize="11sp"
-                            android:textColor="@color/expense_red"
-                            android:drawablePadding="4dp"
+                            android:drawablePadding="6dp"
                             app:drawableStartCompat="@android:drawable/presence_busy"
                             app:drawableTint="@color/expense_red" />
 
+                        <TextView
+                            android:id="@+id/label_yellow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="24dp"
+                            android:text="50-79%"
+                            android:textColor="#CCFFFFFF"
+                            android:textSize="11sp"
+                            android:drawablePadding="6dp"
+                            app:drawableStartCompat="@android:drawable/presence_away"
+                            app:drawableTint="@color/gold_accent" />
+
+                        <TextView
+                            android:id="@+id/label_green"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="24dp"
+                            android:text="80-100%"
+                            android:textColor="#CCFFFFFF"
+                            android:textSize="11sp"
+                            android:drawablePadding="6dp"
+                            app:drawableStartCompat="@android:drawable/presence_online"
+                            app:drawableTint="@color/soft_mint" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -224,10 +258,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Active Goals"
+                android:layout_marginTop="32dp"
+                android:text="Active Savings Goals"
                 style="@style/FintechHeader"
-                android:textSize="18sp"
-                android:layout_marginBottom="12dp" />
+                android:textSize="20sp"
+                android:textColor="@color/primary_green" />
 
             <include
                 android:id="@+id/empty_state"
@@ -237,6 +272,8 @@
                 android:id="@+id/savings_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:nestedScrollingEnabled="false"
                 tools:listitem="@layout/item_savings_goal" />
 
         </LinearLayout>
@@ -247,7 +284,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
+        android:layout_margin="24dp"
         android:text="New Goal"
         android:textColor="@color/white"
         app:backgroundTint="@color/primary_green"

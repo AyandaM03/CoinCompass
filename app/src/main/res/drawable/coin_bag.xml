@@ -1,0 +1,24 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="96"
+    android:viewportHeight="96">
+    <!-- Bag Body -->
+    <path
+        android:fillColor="#C68642"
+        android:pathData="M24,38 C20,55 24,80 48,84 C72,80 76,55 72,38 C66,28 58,24 48,24 C38,24 30,28 24,38Z" />
+    <!-- Bag Neck -->
+    <path
+        android:fillColor="#8B5A2B"
+        android:pathData="M36,24 L60,24 L56,36 L40,36Z" />
+    <!-- Rope -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M38,32 C44,36 52,36 58,32"
+        android:strokeWidth="3"
+        android:strokeColor="#5D4037" />
+    <!-- Coin -->
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M48,44 C41,44 36,49 36,56 C36,63 41,68 48,68 C55,68 60,63 60,56 C60,49 55,44 48,44Z" />
+</vector>

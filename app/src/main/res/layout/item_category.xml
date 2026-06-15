@@ -6,9 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
-    app:cardBackgroundColor="#F8F9FA"
+    app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="16dp"
-    app:cardElevation="0dp"
+    app:cardElevation="2dp"
     app:strokeWidth="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,20 +20,20 @@
             android:id="@+id/icon_container"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            app:cardBackgroundColor="@color/primary_green"
+            app:cardBackgroundColor="@color/soft_mint"
             app:cardCornerRadius="24dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/category_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+            <TextView
+                android:id="@+id/category_emoji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_categories"
-                app:tint="@color/white" />
+                android:text="📁"
+                android:textSize="22sp" />
         </com.google.android.material.card.MaterialCardView>
 
         <TextView

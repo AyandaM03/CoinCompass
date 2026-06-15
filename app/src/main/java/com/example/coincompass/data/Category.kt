@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 data class Category(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
-    val budgetAmount: Double = 0.0 // Maximum goal/budget for this category
+    val budgetAmount: Double = 0.0,
+    val icon: String = "📁"
 )

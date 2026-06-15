@@ -6,11 +6,14 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coincompass.R
@@ -19,7 +22,7 @@ import com.example.coincompass.data.Category
 import com.example.coincompass.data.CategorySummary
 import com.example.coincompass.databinding.ActivityAddCategoryBinding
 import com.example.coincompass.databinding.DialogAddCategoryBinding
-import com.example.coincompass.databinding.ItemCategoryBinding
+import com.example.coincompass.databinding.ItemCategoryBudgetBinding
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -30,6 +33,17 @@ class AddCategoryActivity : AppCompatActivity() {
     private lateinit var adapter: CategoryAdapter
     private var allCategories: List<Category> = emptyList()
     private var categorySummaries: List<CategorySummary> = emptyList()
+
+    private val emojis = listOf(
+        "🍔", "🍕", "🍟", "🍎", "☕", // Food
+        "🚗", "🚌", "🚕", "🚆", // Transport
+        "💊", "🏥", "❤️", "🧘", // Health
+        "🛍️", "👕", "👟", // Shopping
+        "🎮", "🎬", "🎵", "🎤", // Entertainment
+        "📚", "🎓", "✏️", // Education
+        "💰", "🏦", // Savings
+        "🏠", "⚡", "📶", "🛒", "🛠️", "💅", "✈️" // General
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,13 +63,24 @@ class AddCategoryActivity : AppCompatActivity() {
     private fun observeData() {
         db.categoryDao().getAllCategories().observe(this) { categories ->
             allCategories = categories
+            updateSummary()
             filterCategories(binding.searchEdit.text.toString())
         }
 
         db.expenseDao().getCategorySummaries("1970-01-01", "2100-12-31").observe(this) { summaries ->
             categorySummaries = summaries
+            updateSummary()
             adapter.notifyDataSetChanged()
         }
+    }
+
+    private fun updateSummary() {
+        binding.totalCategoriesText.text = allCategories.size.toString()
+        val totalBudget = allCategories.sumOf { it.budgetAmount }
+        binding.totalBudgetText.text = "R${"%.2f".format(totalBudget)}"
+        
+        val mostUsed = categorySummaries.maxByOrNull { it.totalAmount }
+        binding.mostUsedCategoryText.text = mostUsed?.categoryName ?: "--"
     }
 
     private fun setupListeners() {
@@ -90,54 +115,59 @@ class AddCategoryActivity : AppCompatActivity() {
         val dialog = builder.create()
         dialog.show()
 
+        var selectedEmoji = "📁"
+
+        dialogBinding.emojiRecycler.layoutManager = GridLayoutManager(this, 5)
+        dialogBinding.emojiRecycler.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+                val tv = TextView(parent.context).apply {
+                    textSize = 24f
+                    gravity = android.view.Gravity.CENTER
+                    setPadding(16, 16, 16, 16)
+                    layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                }
+                return object : RecyclerView.ViewHolder(tv) {}
+            }
+
+            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+                val emoji = emojis[position]
+                (holder.itemView as TextView).text = emoji
+                holder.itemView.setOnClickListener {
+                    selectedEmoji = emoji
+                    dialogBinding.previewEmoji.text = emoji
+                }
+            }
+
+            override fun getItemCount() = emojis.size
+        }
+
+        val watcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val name = dialogBinding.nameEdit.text.toString().trim()
+                dialogBinding.previewName.text = if (name.isEmpty()) "Category Name" else name
+                
+                val budget = dialogBinding.budgetEdit.text.toString().toDoubleOrNull() ?: 0.0
+                dialogBinding.previewBudget.text = "Monthly Budget: R${"%.2f".format(budget)}"
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        }
+        dialogBinding.nameEdit.addTextChangedListener(watcher)
+        dialogBinding.budgetEdit.addTextChangedListener(watcher)
+
         dialogBinding.btnSave.setOnClickListener {
             val name = dialogBinding.nameEdit.text.toString().trim()
+            val budget = dialogBinding.budgetEdit.text.toString().toDoubleOrNull() ?: 0.0
+            
             if (name.isNotEmpty()) {
                 lifecycleScope.launch {
-                    db.categoryDao().insert(Category(name = name, budgetAmount = 0.0))
+                    db.categoryDao().insert(Category(name = name, budgetAmount = budget, icon = selectedEmoji))
                     dialog.dismiss()
-                    Toast.makeText(this@AddCategoryActivity, "Category added", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@AddCategoryActivity, "Category created successfully!", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(this, "Enter a name", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please enter a category name", Toast.LENGTH_SHORT).show()
             }
-        }
-    }
-
-    private fun getCategoryColor(name: String): Int {
-        return when (name.lowercase()) {
-            "health", "healthcare" -> Color.parseColor("#00897B") // Teal
-            "food", "food & dining" -> Color.parseColor("#F87171") // Coral/Red
-            "transport" -> Color.parseColor("#FBBF24") // Amber
-            "education" -> Color.parseColor("#2196F3") // Blue
-            "entertainment" -> Color.parseColor("#8B5CF6") // Purple
-            "groceries" -> Color.parseColor("#2E7D32") // Emerald Green
-            "housing" -> Color.parseColor("#795548") // Brown
-            "salary" -> Color.parseColor("#4CAF50") // Green
-            "utilities" -> Color.parseColor("#FFCA28") // Amber
-            "fitness" -> Color.parseColor("#EC407A") // Pink
-            "shopping" -> Color.parseColor("#AB47BC") // Purple
-            "investments" -> Color.parseColor("#26A69A") // Teal
-            "travel" -> Color.parseColor("#26C6DA") // Cyan
-            else -> {
-                val colors = listOf("#4DB6AC", "#9575CD", "#F06292", "#4FC3F7", "#AED581", "#FF8A65")
-                Color.parseColor(colors[Math.abs(name.hashCode()) % colors.size])
-            }
-        }
-    }
-
-    private fun getCategoryIcon(name: String): Int {
-        return when (name.lowercase()) {
-            "health", "healthcare" -> android.R.drawable.ic_menu_myplaces
-            "food", "food & dining" -> R.drawable.ic_categories
-            "transport" -> R.drawable.ic_calendar
-            "education" -> R.drawable.ic_goals
-            "entertainment" -> R.drawable.ic_analytics
-            "groceries" -> R.drawable.ic_categories
-            "salary", "freelance" -> R.drawable.ic_add
-            "travel" -> R.drawable.ic_calendar
-            "utilities" -> R.drawable.ic_categories
-            else -> R.drawable.ic_categories
         }
     }
 
@@ -150,29 +180,51 @@ class AddCategoryActivity : AppCompatActivity() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val itemBinding = ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val itemBinding = ItemCategoryBudgetBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return ViewHolder(itemBinding)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = list[position]
-            holder.binding.categoryName.text = item.name
-            
             val summary = categorySummaries.find { it.categoryName == item.name }
-            val amount = summary?.totalAmount ?: 0.0
-            
-            // Transaction count placeholder as requested in prompt
-            holder.binding.categoryDescription.text = "0 Transactions" 
-            
-            holder.binding.categoryAmount.text = if (amount >= 0) "R${"%.2f".format(amount)}" else "-R${"%.2f".format(-amount)}"
-            holder.binding.categoryAmount.setTextColor(if (amount >= 0) ContextCompat.getColor(this@AddCategoryActivity, R.color.income_green) else ContextCompat.getColor(this@AddCategoryActivity, R.color.expense_red))
+            val spent = summary?.totalAmount ?: 0.0
+            val budget = item.budgetAmount
 
-            val color = getCategoryColor(item.name)
-            holder.binding.iconContainer.setCardBackgroundColor(color)
-            holder.binding.categoryIcon.setImageResource(getCategoryIcon(item.name))
+            holder.binding.categoryName.text = item.name
+            holder.binding.categoryEmoji.text = item.icon
+            holder.binding.categorySpent.text = "R${"%.2f".format(spent)}"
+            holder.binding.categoryBudget.text = "R${"%.2f".format(budget)}"
+            
+            val percent = if (budget > 0) (spent / budget * 100).toInt() else 0
+            holder.binding.categoryProgress.progress = percent.coerceAtMost(100)
+            holder.binding.percentLabel.text = "$percent%"
+            
+            val remaining = budget - spent
+            holder.binding.categoryStatus.text = "R${"%.2f".format(remaining.coerceAtLeast(0.0))}"
+            
+            val statusColor = when {
+                percent < 80 -> ContextCompat.getColor(this@AddCategoryActivity, R.color.primary_green)
+                percent < 100 -> Color.parseColor("#FBBF24") // Amber
+                else -> ContextCompat.getColor(this@AddCategoryActivity, R.color.expense_red)
+            }
+            
+            holder.binding.categoryProgress.setIndicatorColor(statusColor)
+            holder.binding.categoryStatus.setTextColor(statusColor)
+            holder.binding.percentLabel.setTextColor(statusColor)
+
+            // Category specific accent color for the icon background
+            val accentColor = when (item.name.lowercase()) {
+                "food", "groceries" -> Color.parseColor("#FFF3E0") // Light Orange
+                "health", "medical" -> Color.parseColor("#FFEBEE") // Light Red
+                "savings", "income" -> Color.parseColor("#E8F5E9") // Light Green
+                "entertainment" -> Color.parseColor("#F3E5F5") // Light Purple
+                "transport" -> Color.parseColor("#E3F2FD") // Light Blue
+                else -> ContextCompat.getColor(this@AddCategoryActivity, R.color.soft_mint)
+            }
+            holder.binding.iconBg.setCardBackgroundColor(accentColor)
         }
 
         override fun getItemCount() = list.size
-        inner class ViewHolder(val binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root)
+        inner class ViewHolder(val binding: ItemCategoryBudgetBinding) : RecyclerView.ViewHolder(binding.root)
     }
 }

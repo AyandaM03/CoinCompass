@@ -1,5 +1,6 @@
 package com.example.coincompass.ui
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -36,7 +37,7 @@ class SetGoalActivity : AppCompatActivity() {
         val endDate = "$year-${month.toString().padStart(2, '0')}-31"
 
         db.expenseDao().getExpensesBetweenDates(startDate, endDate).observe(this) { expenses ->
-            currentSpending = expenses?.sumOf { it.amount } ?: 0.0
+            currentSpending = expenses?.filter { it.type == "Expense" }?.sumOf { it.amount } ?: 0.0
             // Re-fetch goal to update visuals with spending
             db.goalDao().getGoalForMonth(currentMonth).value?.let { updateVisuals(it) }
         }
@@ -67,8 +68,8 @@ class SetGoalActivity : AppCompatActivity() {
                     db.goalDao().insertOrUpdate(newGoal)
                     Toast.makeText(this@SetGoalActivity, "Goal updated successfully!", Toast.LENGTH_SHORT).show()
                     
-                    binding.currentStrategyCard.animate().scaleX(1.05f).scaleY(1.05f).setDuration(100).withEndAction {
-                        binding.currentStrategyCard.animate().scaleX(1f).scaleY(1f).setDuration(100).start()
+                    binding.goalSummaryCard.animate().scaleX(1.02f).scaleY(1.02f).setDuration(150).withEndAction {
+                        binding.goalSummaryCard.animate().scaleX(1f).scaleY(1f).setDuration(150).start()
                     }.start()
                 }
             } else {
@@ -85,31 +86,39 @@ class SetGoalActivity : AppCompatActivity() {
         val minGoal = goal?.minGoal ?: 0.0
         val maxGoal = goal?.maxGoal ?: 0.0
 
-        binding.minGoalDisplay.text = "R${"%.2f".format(minGoal)}"
-        binding.maxGoalDisplay.text = "R${"%.2f".format(maxGoal)}"
+        binding.summaryMinGoal.text = "R${"%.2f".format(minGoal)}"
+        binding.summaryMaxGoal.text = "R${"%.2f".format(maxGoal)}"
+        binding.summaryCurrentSpending.text = "R${"%.2f".format(currentSpending)}"
 
         if (maxGoal > 0) {
             val progress = ((currentSpending / maxGoal) * 100).toInt()
-            binding.rangeIndicator.progress = progress.coerceAtMost(100)
+            binding.goalProgressCircle.progress = progress.coerceAtMost(100)
+            binding.goalPercentText.text = "$progress%"
             
             when {
-                currentSpending < minGoal -> {
-                    binding.statusBadge.text = "BELOW GOAL"
-                    binding.statusBadge.backgroundTintList = ContextCompat.getColorStateList(this, R.color.cat_transport) // Using amber/yellow for below goal as requested/appropriate
+                currentSpending <= minGoal -> {
+                    binding.goalStatusText.text = "Excellent"
+                    binding.goalStatusText.setTextColor(ContextCompat.getColor(this, R.color.primary_green))
+                    binding.statusBadgeContainer.setCardBackgroundColor(ContextCompat.getColor(this, R.color.soft_mint))
+                    binding.goalProgressCircle.setIndicatorColor(ContextCompat.getColor(this, R.color.primary_green))
                 }
                 currentSpending <= maxGoal -> {
-                    binding.statusBadge.text = "WITHIN GOAL"
-                    binding.statusBadge.backgroundTintList = ContextCompat.getColorStateList(this, R.color.primary_green)
+                    binding.goalStatusText.text = "Warning"
+                    binding.goalStatusText.setTextColor(Color.parseColor("#F9A825")) // Gold
+                    binding.statusBadgeContainer.setCardBackgroundColor(Color.parseColor("#FFF8E1"))
+                    binding.goalProgressCircle.setIndicatorColor(Color.parseColor("#F9A825"))
                 }
                 else -> {
-                    binding.statusBadge.text = "ABOVE LIMIT"
-                    binding.statusBadge.backgroundTintList = ContextCompat.getColorStateList(this, R.color.expense_red)
+                    binding.goalStatusText.text = "Exceeded"
+                    binding.goalStatusText.setTextColor(ContextCompat.getColor(this, R.color.expense_red))
+                    binding.statusBadgeContainer.setCardBackgroundColor(Color.parseColor("#FFEBEE"))
+                    binding.goalProgressCircle.setIndicatorColor(ContextCompat.getColor(this, R.color.expense_red))
                 }
             }
-            binding.statusBadge.visibility = View.VISIBLE
         } else {
-            binding.rangeIndicator.progress = 0
-            binding.statusBadge.visibility = View.GONE
+            binding.goalProgressCircle.progress = 0
+            binding.goalPercentText.text = "0%"
+            binding.goalStatusText.text = "No Goal"
         }
     }
 }

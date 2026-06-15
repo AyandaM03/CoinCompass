@@ -8,6 +8,7 @@ import android.view.View
 import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
+import com.example.coincompass.MainActivity
 import com.example.coincompass.R
 import com.example.coincompass.databinding.ActivitySplashBinding
 
@@ -67,18 +68,24 @@ class SplashActivity : AppCompatActivity() {
 
         // Move to the next screen after a delay
         Handler(Looper.getMainLooper()).postDelayed({
-            val sharedPref = getSharedPreferences("user_prefs", MODE_PRIVATE)
-            val isRemembered = sharedPref.getBoolean("remember_me", false)
-            
-            val targetActivity = if (isRemembered) {
-                com.example.coincompass.MainActivity::class.java
-            } else {
-                LoginActivity::class.java
+            try {
+                val sharedPref = getSharedPreferences("user_prefs", MODE_PRIVATE)
+                val isRemembered = sharedPref.getBoolean("remember_me", false)
+                
+                val targetActivity = if (isRemembered) {
+                    MainActivity::class.java
+                } else {
+                    LoginActivity::class.java
+                }
+                
+                startActivity(Intent(this, targetActivity))
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                finish()
+            } catch (e: Exception) {
+                // Fail-safe to Login if something goes wrong with MainActivity redirection
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
             }
-            
-            startActivity(Intent(this, targetActivity))
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-            finish()
         }, 3000)
     }
 }

@@ -25,6 +25,9 @@ interface CategoryDao {
 
     @Query("SELECT * FROM categories")
     fun getAllCategories(): LiveData<List<Category>>
+
+    @Query("SELECT * FROM categories")
+    suspend fun getAllCategoriesList(): List<Category>
 }
 
 @Dao
@@ -40,6 +43,9 @@ interface ExpenseDao {
 
     @Query("SELECT * FROM expenses")
     fun getAllExpenses(): LiveData<List<Expense>>
+
+    @Query("SELECT * FROM expenses")
+    suspend fun getAllExpensesList(): List<Expense>
 
     @Query("SELECT * FROM expenses WHERE id = :id")
     suspend fun getExpenseById(id: Long): Expense?
@@ -81,6 +87,21 @@ interface SavingsGoalDao {
 
     @Query("SELECT * FROM savings_goals")
     fun getAllSavingsGoals(): LiveData<List<SavingsGoal>>
+
+    @Query("SELECT * FROM savings_goals WHERE id = :id")
+    suspend fun getSavingsGoalById(id: Long): SavingsGoal?
+}
+
+@Dao
+interface RewardPointsDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertOrUpdate(rewardPoints: RewardPoints)
+
+    @Query("SELECT * FROM reward_points WHERE id = 1 LIMIT 1")
+    fun getRewardPoints(): LiveData<RewardPoints?>
+
+    @Query("SELECT * FROM reward_points WHERE id = 1 LIMIT 1")
+    suspend fun getRewardPointsSync(): RewardPoints?
 }
 
 data class CategorySummary(

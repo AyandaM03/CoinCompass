@@ -47,6 +47,10 @@ class BudgetsFragment : Fragment() {
         setupRecyclerView()
         observeData()
 
+        binding.btnBack.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
         binding.btnEditBudget.setOnClickListener {
             startActivity(android.content.Intent(requireContext(), com.example.coincompass.ui.AddCategoryActivity::class.java))
         }
@@ -73,7 +77,7 @@ class BudgetsFragment : Fragment() {
         db.categoryDao().getAllCategories().observe(viewLifecycleOwner) { categories ->
             db.expenseDao().getCategorySummaries(startDate, endDate).observe(viewLifecycleOwner) { summaries ->
                 adapter.setData(categories, summaries)
-                updateCharts(summaries)
+                updateCharts(categories, summaries)
                 updateInsights(summaries, currentMonthStr)
             }
         }
@@ -107,7 +111,7 @@ class BudgetsFragment : Fragment() {
         }
     }
 
-    private fun updateCharts(summaries: List<CategorySummary>) {
+    private fun updateCharts(categories: List<Category>, summaries: List<CategorySummary>) {
         if (summaries.isEmpty()) {
             binding.chartCard.visibility = View.GONE
             return
@@ -128,7 +132,6 @@ class BudgetsFragment : Fragment() {
                 "transport" -> Color.parseColor("#FBBF24") // Amber
                 "education" -> Color.parseColor("#3B82F6") // Blue
                 else -> {
-                    // Generate a unique color based on hash
                     val h = abs(summary.categoryName.hashCode() % 360).toFloat()
                     Color.HSVToColor(floatArrayOf(h, 0.6f, 0.9f))
                 }
@@ -136,16 +139,15 @@ class BudgetsFragment : Fragment() {
         }
         
         dataSet.colors = colors
-        dataSet.sliceSpace = 4f
-        dataSet.selectionShift = 10f
-        dataSet.setDrawValues(false) // Hide labels inside
+        dataSet.sliceSpace = 6f
+        dataSet.selectionShift = 12f
+        dataSet.setDrawValues(false) 
         
         val data = PieData(dataSet)
         binding.spendingPieChart.apply {
             this.data = data
             description.isEnabled = false
             
-            // Legend
             legend.isEnabled = true
             legend.textColor = ContextCompat.getColor(requireContext(), R.color.primary_green)
             legend.textSize = 12f
@@ -154,28 +156,34 @@ class BudgetsFragment : Fragment() {
             legend.horizontalAlignment = com.github.mikephil.charting.components.Legend.LegendHorizontalAlignment.CENTER
             legend.orientation = com.github.mikephil.charting.components.Legend.LegendOrientation.HORIZONTAL
             legend.setDrawInside(false)
-            legend.yEntrySpace = 8f
-            legend.xEntrySpace = 16f
+            legend.yEntrySpace = 12f
+            legend.xEntrySpace = 24f
             legend.isWordWrapEnabled = true
             
-            // Donut hole
+            // Modern Donut Hole
             setHoleColor(Color.WHITE)
-            holeRadius = 65f
-            transparentCircleRadius = 70f
+            holeRadius = 75f
+            transparentCircleRadius = 80f
             setDrawCenterText(true)
-            centerText = "Tap a slice\nfor details"
+            centerText = "Tap for\ndetails"
             setCenterTextColor(ContextCompat.getColor(requireContext(), R.color.primary_green))
-            setCenterTextSize(16f)
+            setCenterTextSize(18f)
+            setCenterTextTypeface(android.graphics.Typeface.DEFAULT_BOLD)
             
-            setEntryLabelColor(Color.TRANSPARENT) // Hide labels
+            setEntryLabelColor(Color.TRANSPARENT)
             
-            animateY(1400, com.github.mikephil.charting.animation.Easing.EaseInOutQuad)
+            animateY(1200, com.github.mikephil.charting.animation.Easing.EaseInOutQuad)
             
             setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
                 override fun onValueSelected(e: com.github.mikephil.charting.data.Entry?, h: Highlight?) {
                     if (e is PieEntry) {
-                        val percentage = (e.value / totalAmount * 100).toInt()
-                        showSpendingDetailBottomSheet(e.label, e.value.toDouble(), percentage)
+                        val categoryName = e.label
+                        val spent = e.value.toDouble()
+                        val category = categories.find { it.name == categoryName }
+                        val budget = category?.budgetAmount ?: 0.0
+                        val percent = if (budget > 0) (spent / budget * 100).toInt() else 0
+                        
+                        showSpendingDetailBottomSheet(categoryName, spent, budget, percent)
                     }
                 }
                 override fun onNothingSelected() {}
@@ -185,15 +193,14 @@ class BudgetsFragment : Fragment() {
         }
     }
 
-    private fun showSpendingDetailBottomSheet(category: String, amount: Double, percent: Int) {
+    private fun showSpendingDetailBottomSheet(category: String, amount: Double, budget: Double, percent: Int) {
         val bottomSheet = BottomSheetDialog(requireContext())
         val view = LayoutInflater.from(context).inflate(R.layout.layout_spending_detail_bottom_sheet, null)
         
         view.findViewById<TextView>(R.id.bs_category_name).text = category
-        view.findViewById<TextView>(R.id.bs_amount).text = "R${"%.2f".format(amount)}"
-        view.findViewById<TextView>(R.id.bs_percentage).text = "$percent% of total spending"
+        view.findViewById<TextView>(R.id.bs_amount).text = "Spent: R${"%.2f".format(amount)}"
+        view.findViewById<TextView>(R.id.bs_percentage).text = "Budget: R${"%.2f".format(budget)} ($percent% used)"
         
-        // Color indicator
         val colorView = view.findViewById<View>(R.id.bs_color_indicator)
         colorView.background.setTint(getCategoryColorBS(category))
 
@@ -258,6 +265,7 @@ class BudgetsFragment : Fragment() {
             holder.binding.categoryName.text = category.name
             holder.binding.categorySpent.text = "R${"%.2f".format(spent)}"
             holder.binding.categoryBudget.text = "R${"%.2f".format(budget)}"
+            holder.binding.categoryEmoji.text = category.icon
             
             val percent = if (budget > 0) (spent / budget * 100).toInt() else 0
             holder.binding.categoryProgress.progress = percent.coerceAtMost(100)

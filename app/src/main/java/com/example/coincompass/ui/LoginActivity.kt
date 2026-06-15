@@ -23,6 +23,15 @@ class LoginActivity : AppCompatActivity() {
         val db = AppDatabase.getDatabase(this)
         val sharedPref = getSharedPreferences("user_prefs", MODE_PRIVATE)
 
+        // Try to pre-warm the database to catch migration issues early
+        lifecycleScope.launch {
+            try {
+                db.userDao().getUserByUsername("")
+            } catch (e: Exception) {
+                // If migration fails, the database is destructive migrated by fallback
+            }
+        }
+
         // Check if "Remember Me" was previously checked
         val isRemembered = sharedPref.getBoolean("remember_me", false)
         if (isRemembered) {

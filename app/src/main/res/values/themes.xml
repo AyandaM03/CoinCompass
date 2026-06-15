@@ -79,7 +79,7 @@
         <item name="cornerSize">50%</item>
     </style>
 
-    <style name="CalendarHeaderStyle" parent="">
+    <style name="CalendarHeaderStyle" parent="TextAppearance.Material3.BodyMedium">
         <item name="android:textColor">@color/primary_green</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">16sp</item>

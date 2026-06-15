@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/background_off_white">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -15,14 +15,14 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="20dp"
+            android:paddingHorizontal="24dp"
             android:paddingTop="56dp"
             android:paddingBottom="16dp">
 
             <ImageButton
                 android:id="@+id/btn_back"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@android:drawable/ic_menu_revert"
                 app:layout_constraintStart_toStartOf="parent"
@@ -35,8 +35,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:text="Add Transaction"
+                android:text="New Transaction"
                 android:textColor="@color/primary_green"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="@id/btn_back"
                 app:layout_constraintStart_toEndOf="@id/btn_back"
                 app:layout_constraintTop_toTopOf="@id/btn_back" />
@@ -54,16 +55,92 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="24dp">
 
-            <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Material3.CardView.Elevated"
+            <!-- Transaction Type Cards -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/soft_mint"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="0dp">
+                android:orientation="horizontal"
+                android:baselineAligned="false"
+                android:layout_marginBottom="24dp">
+
+                <!-- Expense Selector Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_type_expense"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:strokeWidth="0dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="16dp">
+                        <ImageView
+                            android:id="@+id/icon_expense"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_history"
+                            app:tint="@color/text_grey" />
+                        <TextView
+                            android:id="@+id/text_expense"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Expense"
+                            android:textColor="@color/text_grey"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Income Selector Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_type_income"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:strokeWidth="0dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="16dp">
+                        <ImageView
+                            android:id="@+id/icon_income"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_add"
+                            app:tint="@color/text_grey" />
+                        <TextView
+                            android:id="@+id/text_income"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Income"
+                            android:textColor="@color/text_grey"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- Input Form Card -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/FintechCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -71,49 +148,17 @@
                     android:orientation="vertical"
                     android:padding="24dp">
 
-                    <!-- Transaction Type Toggle -->
-                    <com.google.android.material.button.MaterialButtonToggleGroup
-                        android:id="@+id/type_toggle_group"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="24dp"
-                        app:checkedButton="@+id/btn_type_expense"
-                        app:selectionRequired="true"
-                        app:singleSelection="true">
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_type_expense"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Expense"
-                            android:textColor="@color/segmented_text_color"
-                            app:backgroundTint="@drawable/segmented_button_bg"
-                            app:shapeAppearanceOverlay="@null"
-                            app:strokeWidth="0dp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_type_income"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Income"
-                            android:textColor="@color/segmented_text_color"
-                            app:backgroundTint="@drawable/segmented_button_bg"
-                            app:shapeAppearanceOverlay="@null"
-                            app:strokeWidth="0dp" />
-                    </com.google.android.material.button.MaterialButtonToggleGroup>
-
                     <!-- Amount Field -->
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/FintechInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:hint="Amount (ZAR)"
-                        app:prefixText="R ">
+                        android:layout_marginBottom="20dp"
+                        android:hint="Amount"
+                        android:textColorHint="@color/text_grey"
+                        app:prefixText="R "
+                        app:startIconDrawable="@drawable/ic_transactions"
+                        app:startIconTint="@color/primary_green">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/amount_edit"
@@ -128,16 +173,23 @@
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginBottom="20dp"
                         android:hint="Category"
+                        android:textColorHint="@color/text_grey"
                         app:startIconDrawable="@drawable/ic_categories"
-                        app:startIconTint="@color/primary_green">
+                        app:startIconTint="@color/primary_green"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxStrokeColor="@color/primary_green">
 
                         <AutoCompleteTextView
                             android:id="@+id/category_spinner_text"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="none" />
+                            android:inputType="none"
+                            android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Date Picker -->
@@ -145,8 +197,9 @@
                         style="@style/FintechInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:hint="Date"
+                        android:layout_marginBottom="20dp"
+                        android:hint="Transaction Date"
+                        android:textColorHint="@color/text_grey"
                         app:startIconDrawable="@drawable/ic_calendar"
                         app:startIconTint="@color/primary_green">
 
@@ -164,8 +217,9 @@
                         style="@style/FintechInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:hint="Notes">
+                        android:layout_marginBottom="24dp"
+                        android:hint="Description / Notes"
+                        android:textColorHint="@color/text_grey">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/notes_edit"
@@ -177,39 +231,12 @@
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Location Field -->
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/FintechInput"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:hint="Location (Optional)"
-                        app:startIconDrawable="@android:drawable/ic_menu_mylocation"
-                        app:startIconTint="@color/primary_green">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/location_edit"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textCapWords"
-                            android:textColor="@color/black" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
                     <!-- Image Attachment Section -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="Receipt / Image"
-                        android:textColor="@color/text_grey"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_camera"
@@ -219,7 +246,10 @@
                             android:layout_marginEnd="8dp"
                             android:layout_weight="1"
                             android:text="Camera"
-                            app:icon="@android:drawable/ic_menu_camera" />
+                            android:textColor="@color/primary_green"
+                            app:backgroundTint="@color/soft_mint"
+                            app:icon="@android:drawable/ic_menu_camera"
+                            app:iconTint="@color/primary_green" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_gallery"
@@ -229,26 +259,30 @@
                             android:layout_marginStart="8dp"
                             android:layout_weight="1"
                             android:text="Gallery"
-                            app:icon="@android:drawable/ic_menu_gallery" />
+                            android:textColor="@color/primary_green"
+                            app:backgroundTint="@color/soft_mint"
+                            app:icon="@android:drawable/ic_menu_gallery"
+                            app:iconTint="@color/primary_green" />
                     </LinearLayout>
 
                     <ImageView
                         android:id="@+id/receipt_preview"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_height="180dp"
+                        android:layout_marginTop="16dp"
                         android:scaleType="centerCrop"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        tools:visibility="visible" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Transaction Preview Card -->
+            <!-- Real-time Preview -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="Transaction Preview Card"
+                android:text="Live Preview"
                 style="@style/FintechHeader"
                 android:textSize="18sp"
                 android:textColor="@color/primary_green" />
@@ -256,7 +290,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="4dp"
@@ -278,13 +312,13 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent">
 
-                        <ImageView
-                            android:id="@+id/preview_category_icon"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+                        <TextView
+                            android:id="@+id/preview_category_emoji"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_categories"
-                            app:tint="@color/primary_green" />
+                            android:text="📁"
+                            android:textSize="22sp" />
                     </com.google.android.material.card.MaterialCardView>
 
                     <TextView
@@ -330,6 +364,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="40dp"
+                android:layout_marginBottom="40dp"
                 android:text="Save Transaction"
                 android:textSize="18sp"
                 app:cornerRadius="16dp" />

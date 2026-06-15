@@ -30,6 +30,7 @@ class AddSavingsGoalActivity : AppCompatActivity() {
     
     private var selectedIcon = "💰"
     private var selectedColor = "#2E7D32"
+    private var editGoalId: Long = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,11 +38,36 @@ class AddSavingsGoalActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         db = AppDatabase.getDatabase(this)
+        editGoalId = intent.getLongExtra("goal_id", -1)
 
         setupIconPicker()
         setupColorPicker()
         setupListeners()
-        updatePreview()
+        
+        if (isEditMode()) {
+            loadGoalData()
+        } else {
+            updatePreview()
+        }
+    }
+
+    private fun isEditMode() = editGoalId != -1L
+
+    private fun loadGoalData() {
+        binding.headerTitle.text = "Edit Savings Goal"
+        binding.btnCreateGoal.text = "Update Goal"
+        
+        lifecycleScope.launch {
+            val goal = db.savingsGoalDao().getSavingsGoalById(editGoalId)
+            goal?.let {
+                binding.goalNameEdit.setText(it.name)
+                binding.targetAmountEdit.setText(it.targetAmount.toString())
+                binding.targetDateEdit.setText(it.deadline)
+                selectedIcon = it.icon
+                selectedColor = it.color
+                updatePreview()
+            }
+        }
     }
 
     private fun setupIconPicker() {
@@ -112,10 +138,35 @@ class AddSavingsGoalActivity : AppCompatActivity() {
             if (name.isNotEmpty() && targetStr.isNotEmpty()) {
                 val target = targetStr.toDoubleOrNull() ?: 0.0
                 lifecycleScope.launch {
-                    // Note: Entity might need icon/color fields added if persistence is needed for them
-                    db.savingsGoalDao().insert(SavingsGoal(name = name, targetAmount = target, deadline = deadline))
-                    Toast.makeText(this@AddSavingsGoalActivity, "Savings goal successfully created!", Toast.LENGTH_SHORT).show()
-                    finish()
+                    val goal = if (isEditMode()) {
+                        val existing = db.savingsGoalDao().getSavingsGoalById(editGoalId)
+                        existing?.copy(
+                            name = name,
+                            targetAmount = target,
+                            deadline = deadline,
+                            icon = selectedIcon,
+                            color = selectedColor
+                        )
+                    } else {
+                        SavingsGoal(
+                            name = name,
+                            targetAmount = target,
+                            deadline = deadline,
+                            icon = selectedIcon,
+                            color = selectedColor
+                        )
+                    }
+                    
+                    if (goal != null) {
+                        if (isEditMode()) {
+                            db.savingsGoalDao().update(goal)
+                        } else {
+                            db.savingsGoalDao().insert(goal)
+                        }
+                        val msg = if (isEditMode()) "Savings goal updated!" else "Savings goal created!"
+                        Toast.makeText(this@AddSavingsGoalActivity, msg, Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
                 }
             } else {
                 Toast.makeText(this, "Please provide a name and target amount", Toast.LENGTH_SHORT).show()

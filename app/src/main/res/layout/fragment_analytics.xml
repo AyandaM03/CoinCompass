@@ -108,14 +108,14 @@
                     style="@style/Widget.Material3.CardView.Elevated"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="2dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="6dp"
                     app:strokeWidth="0dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/analytics_card_gradient"
                         android:orientation="vertical"
                         android:padding="24dp">
 
@@ -125,13 +125,24 @@
                             android:text="Spending by Category"
                             android:textColor="@color/primary_green"
                             android:textStyle="bold"
-                            android:textSize="18sp" />
+                            android:textSize="20sp" />
 
                         <com.github.mikephil.charting.charts.BarChart
                             android:id="@+id/category_bar_chart"
                             android:layout_width="match_parent"
                             android:layout_height="350dp"
-                            android:layout_marginTop="16dp" />
+                            android:layout_marginTop="20dp" />
+
+                        <TextView
+                            android:id="@+id/no_goals_message"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:layout_gravity="center"
+                            android:text="Set spending goals to compare performance."
+                            android:textColor="@color/text_grey"
+                            android:textSize="12sp"
+                            android:visibility="gone" />
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -180,15 +191,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="4dp"
                 app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="24dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -196,34 +207,50 @@
                         android:text="Quick Summary"
                         android:textColor="@color/primary_green"
                         android:textStyle="bold"
-                        android:textSize="18sp" />
+                        android:textSize="20sp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="20dp"
                         android:baselineAligned="false">
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="12dp"
+                            android:background="@drawable/soft_gradient_card"
+                            android:layout_marginEnd="8dp">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_categories"
+                                app:tint="@color/gold_accent" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
                                 android:text="Top Category"
-                                android:textSize="12sp"
-                                android:textColor="@color/text_grey" />
+                                android:textSize="11sp"
+                                android:textColor="@color/text_grey"
+                                android:textAllCaps="true" />
+
                             <TextView
                                 android:id="@+id/top_category_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
                                 android:text="--"
                                 android:textColor="@color/primary_green"
                                 android:textStyle="bold"
-                                android:textSize="14sp" />
+                                android:textSize="15sp"
+                                android:gravity="center" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -231,21 +258,36 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical"
-                            android:gravity="end">
+                            android:gravity="center"
+                            android:padding="12dp"
+                            android:background="@drawable/soft_gradient_card"
+                            android:layout_marginStart="8dp">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_transactions"
+                                app:tint="@color/primary_green" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Total Period Spending"
-                                android:textSize="12sp"
-                                android:textColor="@color/text_grey" />
+                                android:layout_marginTop="8dp"
+                                android:text="Total Amount"
+                                android:textSize="11sp"
+                                android:textColor="@color/text_grey"
+                                android:textAllCaps="true" />
+
                             <TextView
                                 android:id="@+id/total_period_amount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
                                 android:text="R0.00"
                                 android:textColor="@color/black"
                                 android:textStyle="bold"
-                                android:textSize="14sp" />
+                                android:textSize="15sp"
+                                android:gravity="center" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

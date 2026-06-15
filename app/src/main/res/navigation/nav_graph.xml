@@ -14,14 +14,23 @@
     <fragment
         android:id="@+id/nav_budgets"
         android:name="com.example.coincompass.ui.fragments.BudgetsFragment"
-        android:label="Budgets"
+        android:label="Budget"
         tools:layout="@layout/fragment_placeholder" />
 
     <fragment
         android:id="@+id/nav_analytics"
         android:name="com.example.coincompass.ui.fragments.AnalyticsFragment"
         android:label="Analytics"
-        tools:layout="@layout/fragment_analytics" />
+        tools:layout="@layout/fragment_analytics">
+        <argument
+            android:name="startDate"
+            app:argType="string"
+            android:defaultValue="" />
+        <argument
+            android:name="endDate"
+            app:argType="string"
+            android:defaultValue="" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_savings"
@@ -40,5 +49,11 @@
         android:name="com.example.coincompass.ui.fragments.CalendarFragment"
         android:label="Calendar"
         tools:layout="@layout/fragment_calendar" />
+
+    <fragment
+        android:id="@+id/nav_more"
+        android:name="com.example.coincompass.ui.fragments.MoreFragment"
+        android:label="More"
+        tools:layout="@layout/fragment_more" />
 
 </navigation>

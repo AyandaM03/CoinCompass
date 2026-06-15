@@ -9,5 +9,7 @@ data class SavingsGoal(
     val name: String,
     val targetAmount: Double,
     val currentAmount: Double = 0.0,
-    val deadline: String // YYYY-MM-DD
+    val deadline: String, // YYYY-MM-DD or readable
+    val icon: String = "💰",
+    val color: String = "#2E7D32"
 )

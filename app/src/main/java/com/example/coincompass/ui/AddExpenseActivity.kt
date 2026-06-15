@@ -3,6 +3,7 @@ package com.example.coincompass.ui
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -30,6 +31,7 @@ class AddExpenseActivity : AppCompatActivity() {
     private val calendar = Calendar.getInstance()
     private var selectedImageUri: String? = null
     private var editExpenseId: Long = -1
+    private var selectedType = "Expense" // Default
 
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
@@ -62,6 +64,8 @@ class AddExpenseActivity : AppCompatActivity() {
         
         if (isEditMode()) {
             loadExpenseData()
+        } else {
+            updateTypeSelectorUI()
         }
     }
 
@@ -78,13 +82,9 @@ class AddExpenseActivity : AppCompatActivity() {
                 binding.categorySpinnerText.setText(it.categoryName, false)
                 binding.dateEdit.setText(it.date)
                 binding.notesEdit.setText(it.description)
-                binding.locationEdit.setText(it.startTime)
                 
-                if (it.type == "Income") {
-                    binding.typeToggleGroup.check(R.id.btn_type_income)
-                } else {
-                    binding.typeToggleGroup.check(R.id.btn_type_expense)
-                }
+                selectedType = it.type
+                updateTypeSelectorUI()
                 
                 if (it.photoPath != null) {
                     selectedImageUri = it.photoPath
@@ -95,7 +95,6 @@ class AddExpenseActivity : AppCompatActivity() {
                 }
                 
                 updatePreviewFromInputs()
-                updatePreviewColors(binding.typeToggleGroup.checkedButtonId)
             }
         }
     }
@@ -127,13 +126,65 @@ class AddExpenseActivity : AppCompatActivity() {
             takePhoto.launch(intent)
         }
 
-        binding.typeToggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
-            if (isChecked) updatePreviewColors(checkedId)
+        binding.cardTypeExpense.setOnClickListener {
+            selectedType = "Expense"
+            updateTypeSelectorUI()
+        }
+
+        binding.cardTypeIncome.setOnClickListener {
+            selectedType = "Income"
+            updateTypeSelectorUI()
         }
 
         binding.saveExpenseButton.setOnClickListener {
             saveTransaction()
         }
+    }
+
+    private fun updateTypeSelectorUI() {
+        val primaryGreen = ContextCompat.getColor(this, R.color.primary_green)
+        val goldAccent = ContextCompat.getColor(this, R.color.gold_accent)
+        val white = Color.WHITE
+        val textGrey = ContextCompat.getColor(this, R.color.text_grey)
+
+        if (selectedType == "Expense") {
+            // Selected Expense
+            binding.cardTypeExpense.apply {
+                setCardBackgroundColor(goldAccent)
+                cardElevation = 12f
+                animate().scaleX(1.05f).scaleY(1.05f).setDuration(200).start()
+            }
+            binding.iconExpense.setColorFilter(white)
+            binding.textExpense.setTextColor(white)
+
+            // Unselected Income
+            binding.cardTypeIncome.apply {
+                setCardBackgroundColor(white)
+                cardElevation = 2f
+                animate().scaleX(1.0f).scaleY(1.0f).setDuration(200).start()
+            }
+            binding.iconIncome.setColorFilter(textGrey)
+            binding.textIncome.setTextColor(textGrey)
+        } else {
+            // Selected Income
+            binding.cardTypeIncome.apply {
+                setCardBackgroundColor(primaryGreen)
+                cardElevation = 12f
+                animate().scaleX(1.05f).scaleY(1.05f).setDuration(200).start()
+            }
+            binding.iconIncome.setColorFilter(white)
+            binding.textIncome.setTextColor(white)
+
+            // Unselected Expense
+            binding.cardTypeExpense.apply {
+                setCardBackgroundColor(white)
+                cardElevation = 2f
+                animate().scaleX(1.0f).scaleY(1.0f).setDuration(200).start()
+            }
+            binding.iconExpense.setColorFilter(textGrey)
+            binding.textExpense.setTextColor(textGrey)
+        }
+        updatePreviewColors()
     }
 
     private fun updateDateDisplay() {
@@ -162,24 +213,18 @@ class AddExpenseActivity : AppCompatActivity() {
         val amountStr = binding.amountEdit.text.toString()
         binding.previewAmount.text = if (amountStr.isEmpty()) "R 0.00" else "R $amountStr"
         
-        val category = binding.categorySpinnerText.text.toString()
-        binding.previewCategoryName.text = if (category.isEmpty()) "Select Category" else category
+        val categoryName = binding.categorySpinnerText.text.toString()
+        binding.previewCategoryName.text = if (categoryName.isEmpty()) "Select Category" else categoryName
 
-        val iconRes = when (category.lowercase()) {
-            "groceries" -> R.drawable.ic_categories
-            "food", "food & dining" -> R.drawable.ic_categories
-            "transport" -> R.drawable.ic_calendar
-            "entertainment" -> R.drawable.ic_analytics
-            "salary", "freelance" -> R.drawable.ic_add
-            "investments" -> R.drawable.ic_analytics
-            "savings" -> R.drawable.ic_goals
-            else -> R.drawable.ic_categories
+        lifecycleScope.launch {
+            val categories = db.categoryDao().getAllCategoriesList()
+            val category = categories.find { it.name == categoryName }
+            binding.previewCategoryEmoji.text = category?.icon ?: "📁"
         }
-        binding.previewCategoryIcon.setImageResource(iconRes)
     }
 
-    private fun updatePreviewColors(checkedId: Int) {
-        if (checkedId == R.id.btn_type_income) {
+    private fun updatePreviewColors() {
+        if (selectedType == "Income") {
             binding.previewAmount.setTextColor(ContextCompat.getColor(this, R.color.income_green))
         } else {
             binding.previewAmount.setTextColor(ContextCompat.getColor(this, R.color.expense_red))
@@ -197,9 +242,6 @@ class AddExpenseActivity : AppCompatActivity() {
         val amountStr = binding.amountEdit.text.toString()
         val date = binding.dateEdit.text.toString()
         val notes = binding.notesEdit.text.toString()
-        val location = binding.locationEdit.text.toString()
-        
-        val type = if (binding.typeToggleGroup.checkedButtonId == R.id.btn_type_income) "Income" else "Expense"
 
         if (category.isNotEmpty() && amountStr.isNotEmpty() && date.isNotEmpty()) {
             val amount = amountStr.toDoubleOrNull() ?: 0.0
@@ -208,12 +250,12 @@ class AddExpenseActivity : AppCompatActivity() {
                 val expense = Expense(
                     id = if (isEditMode()) editExpenseId else 0,
                     date = date,
-                    startTime = location, 
+                    startTime = "",
                     endTime = "",
                     description = notes,
                     categoryName = category,
                     amount = amount,
-                    type = type,
+                    type = selectedType,
                     photoPath = selectedImageUri
                 )
                 
